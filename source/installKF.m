@@ -1,40 +1,46 @@
-function installKF()
-if ispc
-    if exist('OCTAVE_VERSION','builtin') == 5
-        proggis1_orig = 'Program Files';
-        proggis2_orig = 'Program Files (x86)';
-        proggis1 = 'PROGRA~1';
-        proggis2 = 'PROGRA~2';
-        af_path = getenv('AF_PATH');
-        af_path = strrep(af_path, proggis2_orig, proggis2);
-        af_path = strrep(af_path, proggis1_orig, proggis1);
-    else
-        af_path = getenv('AF_PATH');
-        if isempty(af_path)
-            af_path = 'C:\Program Files\ArrayFire\v3\';
-            if exist(af_path,'dir') ~= 7
-                af_path = 'C:\Program Files (x86)\ArrayFire\v3\';
+function installKF(varargin)
+% Compiles the necessary mex-files for HELMET
+if isempty(varargin) && isempty(varargin{1})
+    if ispc
+        if exist('OCTAVE_VERSION','builtin') == 5
+            proggis1_orig = 'Program Files';
+            proggis2_orig = 'Program Files (x86)';
+            proggis1 = 'PROGRA~1';
+            proggis2 = 'PROGRA~2';
+            af_path = getenv('AF_PATH');
+            af_path = strrep(af_path, proggis2_orig, proggis2);
+            af_path = strrep(af_path, proggis1_orig, proggis1);
+        else
+            af_path = getenv('AF_PATH');
+            if isempty(af_path)
+                af_path = 'C:\Program Files\ArrayFire\v3\';
                 if exist(af_path,'dir') ~= 7
-                    af_path = 'C:\ArrayFire\v3\';
+                    af_path = 'C:\Program Files (x86)\ArrayFire\v3\';
+                    if exist(af_path,'dir') ~= 7
+                        af_path = 'C:\ArrayFire\v3\';
+                    end
                 end
             end
         end
+    else
+        if exist('/opt/arrayfire/','dir') == 7
+            af_path = '/opt/arrayfire';
+            af_path_include = '/opt/arrayfire/include/';
+        elseif exist('/usr/local/include/af/','dir') == 7
+            af_path = '/usr/local';
+            af_path_include = '/usr/local/include/af';
+        elseif exist('/usr/local/arrayfire/','dir') == 7
+            af_path = '/usr/local/arrayfire';
+            af_path_include = '/usr/local/arrayfire/include/';
+        else
+            warning('ArrayFire not found. Please specify AF_PATH with installKF(''AF_PATH'').')
+            af_path = '';
+            af_path_include = '';
+        end
     end
 else
-    if exist('/opt/arrayfire/','dir') == 7
-        af_path = '/opt/arrayfire';
-        af_path_include = '/opt/arrayfire/include/';
-    elseif exist('/usr/local/include/af/','dir') == 7
-        af_path = '/usr/local';
-        af_path_include = '/usr/local/include/af';
-    elseif exist('/usr/local/arrayfire/','dir') == 7
-        af_path = '/usr/local/arrayfire';
-        af_path_include = '/usr/local/arrayfire/include/';
-    else
-        warning('ArrayFire not found. Please specify AF_PATH, if you wish to use implementation 2.')
-        af_path = '';
-        af_path_include = '';
-    end
+    af_path = varargin{1};
+    af_path_include = [af_path '/include/'];
 end
 
 folder = fileparts(which('installMexKF.m'));
