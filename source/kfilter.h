@@ -9,6 +9,8 @@
 
 #undef MX_HAS_INTERLEAVED_COMPLEX
 
+#define DEBUG false
+
 void kfilter(const mxArray* options, float* out, float* out2, float* outS, float* out2S, float* outP, float* outP2);
 
 // Struct for the TV-prior

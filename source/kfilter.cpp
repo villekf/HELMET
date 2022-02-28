@@ -213,42 +213,42 @@ af::array TGVDenoising(const uint32_t Nx, const uint32_t Ny, const uint32_t Nz, 
 				join(2, u2(span, span, 0, 5), diff1(u2(span, span, span, 5), 2)),
 				join(2, -diff1(u2(span, span, span, 6), 2), u2(span, span, end, 6)) - join(0, u2(0, span, span, 7), diff1(u2(span, span, span, 7))) -
 				join(1, u2(span, 0, span, 8), diff1(u2(span, span, span, 8), 1)));
-			if (n == 0) {
-				mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
-				mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
-				mexPrintf("temp.dims(2) = %d\n", temp.dims(2));
-				mexEvalString("pause(.0001);");
-			}
+			//if (n == 0) {
+			//	mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
+			//	mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
+			//	mexPrintf("temp.dims(2) = %d\n", temp.dims(2));
+			//	mexEvalString("pause(.0001);");
+			//}
 			x = x2 - (join(0, -1.f * temp(0, span, span, 0), -diff1(temp(seq(0, end - 1), span, span, 0)), temp(end - 1, span, span, 0)) +
 				join(1, -1.f * temp(span, 0, span, 1), -diff1(temp(span, seq(0, end - 1), span, 1), 1), temp(span, end - 1, span, 1)) +
 				join(2, -1.f * temp(span, span, 0, 2), -diff1(temp(span, span, seq(0, end - 1), 2), 2), temp(span, span, end - 1, 2)));
 			x = (x + prox * moddims(im, Nx, Ny, Nz)) / (1.f + prox);
-			if (n == 0) {
-				mexPrintf("x.dims(0) = %d\n", x.dims(0));
-				mexPrintf("x.dims(1) = %d\n", x.dims(1));
-				mexPrintf("x.dims(2) = %d\n", x.dims(2));
-				mexEvalString("pause(.0001);");
-			}
+			//if (n == 0) {
+			//	mexPrintf("x.dims(0) = %d\n", x.dims(0));
+			//	mexPrintf("x.dims(1) = %d\n", x.dims(1));
+			//	mexPrintf("x.dims(2) = %d\n", x.dims(2));
+			//	mexEvalString("pause(.0001);");
+			//}
 			array r = r2 + temp;
 			r = r - batchFunc(r, max(sqrt(sum(r * r, 2)) / (prox * lambda1), constant(1.f, Nx, Ny, Nz)), batchDiv);
-			if (n == 0) {
-				mexPrintf("r.dims(0) = %d\n", r.dims(0));
-				mexPrintf("r.dims(1) = %d\n", r.dims(1));
-				mexPrintf("r.dims(2) = %d\n", r.dims(2));
-				mexEvalString("pause(.0001);");
-			}
+			//if (n == 0) {
+			//	mexPrintf("r.dims(0) = %d\n", r.dims(0));
+			//	mexPrintf("r.dims(1) = %d\n", r.dims(1));
+			//	mexPrintf("r.dims(2) = %d\n", r.dims(2));
+			//	mexEvalString("pause(.0001);");
+			//}
 			array apux = 2.f * x - x2;
 			array u = join(3, join(0, diff1(apux), constant(0.f, 1, Ny, 1)), join(1, diff1(apux, 1), constant(0.f, Nx, 1, 1)), join(2, diff1(apux, 2), constant(0.f, 1, 1, Nz))) - (2.f * r - r2);
 			u = u2 + sigma * join(3, join(3, join(0, u(0, span, span, 0), diff1(u(span, span, span, 0))), join(1, diff1(u(span, span, span, 0), 1), constant(0.f, Nx, 1, 1)), join(2, diff1(u(span, span, span, 0), 2), constant(0.f, 1, 1, Nz))),
 				join(3, join(1, u(span, 0, span, 1), diff1(u(span, span, span, 1), 1)), join(0, diff1(u(span, span, span, 1)), constant(0.f, Nx, 1, 1)), join(2, diff1(u(span, span, span, 1), 2), constant(0.f, 1, 1, Nz))),
 				join(3, join(2, u(span, span, 0, 2), diff1(u(span, span, span, 2), 2)), join(0, diff1(u(span, span, span, 2)), constant(0.f, Nx, 1, 1)), join(1, diff1(u(span, span, span, 2), 1), constant(0.f, 1, Ny, 1))));
 			u = batchFunc(u, max(sqrt(sum(u * u, 2)) / lambda2, constant(0.f, Nx, Ny, Nz)), batchDiv);
-			if (n == 0) {
-				mexPrintf("u.dims(0) = %d\n", u.dims(0));
-				mexPrintf("u.dims(1) = %d\n", u.dims(1));
-				mexPrintf("u.dims(2) = %d\n", u.dims(2));
-				mexEvalString("pause(.0001);");
-			}
+			//if (n == 0) {
+			//	mexPrintf("u.dims(0) = %d\n", u.dims(0));
+			//	mexPrintf("u.dims(1) = %d\n", u.dims(1));
+			//	mexPrintf("u.dims(2) = %d\n", u.dims(2));
+			//	mexEvalString("pause(.0001);");
+			//}
 			x2 += rho * (x - x2);
 			r2 += rho * (r - r2);
 			u2 += rho * (u - u2);
@@ -299,21 +299,21 @@ af::array TVprior(const uint32_t Nx, const uint32_t Ny, const uint32_t Nz, const
 			else {
 				pval = (TV.s1(seq(Dim * NN, Dim * (NN + 1) - 1)) * af::pow2(f) + TV.s5(seq(Dim * NN, Dim * (NN + 1) - 1)) * af::pow2(g) + TV.s4(seq(Dim * NN, Dim * (NN + 1) - 1)) * f * g + TV.s2(seq(Dim * NN, Dim * (NN + 1) - 1)) * f * g + TV.TVsmoothing);
 				pval(pval <= 0) = TV.TVsmoothing;
-				mexPrintf("pval.summa = %f\n", af::sum<float>(flat(pval)));
-				//mexPrintf("f.summa = %f\n", af::sum<float>(flat(f)));
-				//mexPrintf("g.summa = %f\n", af::sum<float>(flat(g)));
-				mexPrintf("pval.min = %f\n", af::min<float>(flat(pval)));
-				mexPrintf("pval.max = %f\n", af::max<float>(flat(pval)));
-				mexPrintf("NN = %u\n", NN);
-				mexEvalString("pause(.0001);");
+				//mexPrintf("pval.summa = %f\n", af::sum<float>(flat(pval)));
+				////mexPrintf("f.summa = %f\n", af::sum<float>(flat(f)));
+				////mexPrintf("g.summa = %f\n", af::sum<float>(flat(g)));
+				//mexPrintf("pval.min = %f\n", af::min<float>(flat(pval)));
+				//mexPrintf("pval.max = %f\n", af::max<float>(flat(pval)));
+				//mexPrintf("NN = %u\n", NN);
+				//mexEvalString("pause(.0001);");
 				pval = sqrt(pval);
 				apu1 = 0.5f * (2.f * TV.s1(seq(Dim * NN, Dim * (NN + 1) - 1)) * f + TV.s4(seq(Dim * NN, Dim * (NN + 1) - 1)) * g + TV.s2(seq(Dim * NN, Dim * (NN + 1) - 1)) * g) / pval;
 				apu2 = 0.5f * (2.f * TV.s5(seq(Dim * NN, Dim * (NN + 1) - 1)) * g + TV.s4(seq(Dim * NN, Dim * (NN + 1) - 1)) * f + TV.s2(seq(Dim * NN, Dim * (NN + 1) - 1)) * f) / pval;
 				apu4 = 0.5f * (2.f * TV.s1(seq(Dim * NN, Dim * (NN + 1) - 1)) * f + 2.f * TV.s5(seq(Dim * NN, Dim * (NN + 1) - 1)) * g + TV.s4(seq(Dim * NN, Dim * (NN + 1) - 1)) * f + TV.s2(seq(Dim * NN, Dim * (NN + 1) - 1)) * f + TV.s4(seq(Dim * NN, Dim * (NN + 1) - 1)) * g + TV.s2(seq(Dim * NN, Dim * (NN + 1) - 1)) * g) / pval;
-				mexPrintf("apu1.summa = %f\n", af::sum<float>(flat(apu1)));
-				mexPrintf("apu2.summa = %f\n", af::sum<float>(flat(apu2)));
-				mexPrintf("apu4.summa = %f\n", af::sum<float>(flat(apu4)));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("apu1.summa = %f\n", af::sum<float>(flat(apu1)));
+				//mexPrintf("apu2.summa = %f\n", af::sum<float>(flat(apu2)));
+				//mexPrintf("apu4.summa = %f\n", af::sum<float>(flat(apu4)));
+				//mexEvalString("pause(.0001);");
 			}
 		}
 		else if (TVtype == 2U) {
@@ -461,8 +461,8 @@ af::array TVprior(const uint32_t Nx, const uint32_t Ny, const uint32_t Nz, const
 		gradi = apu4 - apu1 - apu2;
 	gradi = af::flat(gradi);
 	gradi = gradi + 2.f * TV.tau * af::min<float>(af::flat(ima));
-	mexPrintf("gradi.summa = %f\n", af::sum<float>(flat(gradi)));
-	mexEvalString("pause(.0001);");
+	//mexPrintf("gradi.summa = %f\n", af::sum<float>(flat(gradi)));
+	//mexEvalString("pause(.0001);");
 
 	return gradi;
 }
@@ -947,9 +947,9 @@ void loadSystemMatrix(const bool storeData, const bool sparseS, const uint64_t t
 			}
 		}
 	}
-	mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
-	mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
-	mexEvalString("pause(.0001);");
+	//mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
+	//mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
+	//mexEvalString("pause(.0001);");
 }
 
 // Compute the a prior covariance
@@ -959,11 +959,11 @@ void computePminus(const uint32_t algorithm, const bool sparseF, array& Pplus, c
 	const bool useF = false) {
 	// Regular KF
 	if (algorithm == 0) {
-		mexPrintf("F.dims(0) = %d\n", F.dims(0));
-		mexPrintf("F.dims(1) = %d\n", F.dims(1));
-		mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
-		mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
-		mexEvalString("pause(.0001);");
+		//mexPrintf("F.dims(0) = %d\n", F.dims(0));
+		//mexPrintf("F.dims(1) = %d\n", F.dims(1));
+		//mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
+		//mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
+		//mexEvalString("pause(.0001);");
 		if (sparseF) {
 			if (useKineticModel) {
 				Pplus(seq(0, Pplus.dims(0) / 2 - 1), span) = matmul(F, Pplus);
@@ -1429,11 +1429,11 @@ void storeConsistency(const uint64_t tt, const uint64_t Nt, const uint64_t stepS
 
 void computeConsistencyTests(const int64_t cc, const uint64_t Nt, const uint64_t stepSize, const uint64_t initialSteps, const array& v, const uint64_t Nm,
 	const array& eps, const array& epsP, const bool computeBayesianP, const uint8_t complexType, const array& vvi, const array& epsi, const array& epsPi) {
-	mexPrintf("cc = %d\n", cc);
+	//mexPrintf("cc = %d\n", cc);
 	const uint64_t N = Nt - initialSteps - stepSize;
-	mexPrintf("N = %d\n", N);
-	mexPrintf("v.dims(0) = %d\n", v.dims(0));
-	mexPrintf("v.dims(1) = %d\n", v.dims(1));
+	//mexPrintf("N = %d\n", N);
+	//mexPrintf("v.dims(0) = %d\n", v.dims(0));
+	//mexPrintf("v.dims(1) = %d\n", v.dims(1));
 	double chi1 = -1.96 + std::sqrt(static_cast<double>(2ULL * Nm * N - 1ULL));
 	chi1 = (0.5 * chi1 * chi1) / static_cast<double>(N);
 	double chi2 = 1.96 + std::sqrt(static_cast<double>(2ULL * Nm * N - 1ULL));
@@ -1605,9 +1605,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 	uint64_t imDimN = imDim;
 	uint64_t imDimU = imDim;
 
-	mexPrintf("Qi.size() = %d\n", Qi.size());
-	mexPrintf("hnU = %d\n", hnU);
-	mexEvalString("pause(.0001);");
+	if (DEBUG) {
+		mexPrintf("Qi.size() = %d\n", Qi.size());
+		mexPrintf("hnU = %d\n", hnU);
+		mexEvalString("pause(.0001);");
+	}
 
 	if (useKineticModel) {
 		imDimN *= 2ULL;
@@ -1631,8 +1633,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 		int jg = 0;
 		uint64_t kk = 0ULL;
 		double normi = 0.;
-		mexPrintf("algorithm = %d\n", algorithm);
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("algorithm = %d\n", algorithm);
+			mexEvalString("pause(.0001);");
+		}
 
 		// "Normal" KF algorithms (regular, information, one-step)
 		if (algorithm < 3) {
@@ -1678,9 +1682,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					else
 						xtp = constant(0.f, imDimU, N_lag, c32);
 				}
-				mexPrintf("xtp.dims(0) = %d\n", xtp.dims(0));
-				mexPrintf("xtp.dims(1) = %d\n", xtp.dims(1));
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("xtp.dims(0) = %d\n", xtp.dims(0));
+					mexPrintf("xtp.dims(1) = %d\n", xtp.dims(1));
+					mexEvalString("pause(.0001);");
+				}
 			}
 
 			// Preiterate covariance or compute the steady state gain
@@ -1724,9 +1730,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							Pplusi *= fadingAlpha;
 					}
 					if (algorithm == 0) {
-						mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
-						mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
+							mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
+							mexEvalString("pause(.0001);");
+						}
 						if (sparseQ)
 							Pplus = Pplus + Q[kk % sizeQ];
 						else
@@ -1777,8 +1785,8 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								else
 									Pplusi = Pplusi + transpose(matmul(S[kk % hnU], transpose(matmul(S[kk % hnU], diag(Ri[kk % sizeR], 0, false), AF_MAT_TRANS)), AF_MAT_TRANS));
 					}
-					mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
-					mexEvalString("pause(.0001);");
+					//mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
+					//mexEvalString("pause(.0001);");
 					if (algorithm <= 1) {
 						if (complexType == 2) {
 							if (complexS)
@@ -1849,16 +1857,18 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else
 								xt(span, 0, NN) = complex(xtr(seq(0, xtr.dims(0) / 2 - 1)), xtr(seq(xtr.dims(0) / 2, end)));
 					}
-					mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
-					mexPrintf("kk = %d\n", kk);
-					mexEvalString("pause(.0001);");
+					//mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
+					//mexPrintf("kk = %d\n", kk);
+					//mexEvalString("pause(.0001);");
 					if (steadyKF) {
 						//normi = norm(diag(Pplus, 0, true), AF_NORM_EUCLID) / norm(P(span, kk % hn), AF_NORM_EUCLID);
 						normi = norm(diag(Pplus, 0, true) - P(span, kk % hn), AF_NORM_EUCLID);
 						P(span, kk % hn) = diag(Pplus, 0, true);
-						if (kk >= hn) {
-							mexPrintf("normi = %f\n", normi);
-							mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							if (kk >= hn) {
+								mexPrintf("normi = %f\n", normi);
+								mexEvalString("pause(.0001);");
+							}
 						}
 					}
 					kk++;
@@ -1895,9 +1905,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				}
 				if (!steadyKF) {
 					if (algorithm == 2) {
-						mexPrintf("R[0].dims(0) = %d\n", R[0].dims(0));
-						mexPrintf("R[0].dims(1) = %d\n", R[0].dims(1));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("R[0].dims(0) = %d\n", R[0].dims(0));
+							mexPrintf("R[0].dims(1) = %d\n", R[0].dims(1));
+							mexEvalString("pause(.0001);");
+						}
 						if (complexType == 2) {
 							if (complexS)
 								oneStepKF(HH, Si, tt, hnU, Pplusi, sparseR, sizeR, Ri, KGi, useF, F, Fi, sizeF, sparseF, RR, regularization, complexF);
@@ -1928,9 +1940,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							Pplusi *= fadingAlpha;
 					}
 					if (algorithm == 0) {
-						mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
-						mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
+							mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
+							mexEvalString("pause(.0001);");
+						}
 						if (sparseQ)
 							Pplus = Pplus + Q[tt % sizeQ];
 						else
@@ -1942,10 +1956,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								Pplusi(seq(0, end, Pplusi.dims(0) + 1)) = Pplusi(seq(0, end, Pplusi.dims(0) + 1)) + Qi[tt % sizeQ](span, NN);
 					}
 					else if (algorithm == 1 && !useF) {
-						mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
-						mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
-						mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
+							mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
+							mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
+							mexEvalString("pause(.0001);");
+						}
 						if (sparseQ) {
 							Pplus = Q[tt % sizeQ] - transpose(matmul(Q[tt % sizeQ], transpose(matmul(Q[tt % sizeQ], inverse(Pplus + Q[tt % sizeQ], AF_MAT_TRANS)))));
 							if (complexType == 2)
@@ -1953,12 +1969,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						}
 						else {
 							Pplus(seq(0, end, Pplus.dims(0) + 1)) = Pplus(seq(0, end, Pplus.dims(0) + 1)) + Q[tt % sizeQ](span, NN);
-							mexPrintf("Q[tt sizeQ](span, NN).summa = %f\n", af::sum<float>(flat(Q[tt % sizeQ](span, NN))));
-							mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
+							//mexPrintf("Q[tt sizeQ](span, NN).summa = %f\n", af::sum<float>(flat(Q[tt % sizeQ](span, NN))));
+							//mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
 							mexEvalString("pause(.0001);");
 							Pplus = -batchFunc(transpose(Q[tt % sizeQ](span, NN)), batchFunc(Q[tt % sizeQ](span, NN), inverse(Pplus), batchMul), batchMul);
-							mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
+							//mexEvalString("pause(.0001);");
 							Pplus(seq(0, end, Pplus.dims(0) + 1)) = Pplus(seq(0, end, Pplus.dims(0) + 1)) + Q[tt % sizeQ](span, NN);
 							if (complexType == 2) {
 								Pplusi(seq(0, end, Pplusi.dims(0) + 1)) = Pplusi(seq(0, end, Pplusi.dims(0) + 1)) + Qi[tt % sizeQ](span, NN);
@@ -1966,8 +1982,8 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								Pplusi(seq(0, end, Pplusi.dims(0) + 1)) = Pplusi(seq(0, end, Pplusi.dims(0) + 1)) + Qi[tt % sizeQ](span, NN);
 							}
 						}
-						mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
+						//mexEvalString("pause(.0001);");
 					}
 				}
 				if (useSmoother && (!steadyS || (steadyS && tt == N_lag - 1ULL) || (steadyS && tt >= N_lag - 1 && jg == skip) || (steadyS && tt == (Nt - 1)))) {
@@ -2092,10 +2108,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							}
 						}
 						sGain = true;
-						mexPrintf("KS[dimS].dims(0) = %d\n", KS[dimS].dims(0));
-						mexPrintf("KS[dimS].dims(1) = %d\n", KS[dimS].dims(1));
-						mexPrintf("KS[dimS].summa = %f\n", af::sum<float>(flat(KS[dimS])));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("KS[dimS].dims(0) = %d\n", KS[dimS].dims(0));
+							mexPrintf("KS[dimS].dims(1) = %d\n", KS[dimS].dims(1));
+							mexPrintf("KS[dimS].summa = %f\n", af::sum<float>(flat(KS[dimS])));
+							mexEvalString("pause(.0001);");
+						}
 					}
 				}
 				if (!steadyKF) {
@@ -2167,8 +2185,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					}
 					//mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
 					//mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
-					mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
-					mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
+						mexEvalString("pause(.0001);");
+					}
 					if (complexType == 3)
 						if (complexRef && augType > 0 && regularization == 1)
 							computeInnovation(regularization, SS, window, m0, nMeas, NN, Nm, tt, S[tt % hnU], xtr, Li, Si, complexType, hnU);
@@ -2177,10 +2197,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					else
 						computeInnovation(regularization, SS, window, real(m0), nMeas, NN, Nm, tt, S[tt % hnU], xtr, Ly, Si, complexType, hnU);
 					//}
-					mexPrintf("SS.dims(0) = %d\n", SS.dims(0));
-					mexPrintf("SS.dims(1) = %d\n", SS.dims(1));
-					mexPrintf("SS.summa = %f\n", af::sum<float>(flat(SS)));
-					mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("SS.dims(0) = %d\n", SS.dims(0));
+						mexPrintf("SS.dims(1) = %d\n", SS.dims(1));
+						mexPrintf("SS.summa = %f\n", af::sum<float>(flat(SS)));
+						mexEvalString("pause(.0001);");
+					}
 					if (algorithm <= 1) {
 						if (complexType == 2) {
 							if (algorithm == 1) {
@@ -2205,8 +2227,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						computeKG(algorithm, KG, HH, sparseR, R, Pplus, S, tt, hnU, sizeR, tt % hnU, RR, regularization, complexType, Si, PI);
 					}
 					af::eval(KG);
-					mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
-					mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
+						mexEvalString("pause(.0001);");
+					}
 				}
 
 				if (complexType == 3)
@@ -2221,10 +2245,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				//}
 				//else {
 				computeAPrioriX(useF, useU, useG, useKineticModel, algorithm, xtr, xti, imDim, F, Fi, complexType, G, Gi, u, complexF, complexG, tt, sizeF, sizeG, sizeU);
-				mexPrintf("xtr.dims(0) = %d\n", xtr.dims(0));
-				mexPrintf("xtr.dims(1) = %d\n", xtr.dims(1));
-				mexPrintf("xtr.summa = %f\n", af::sum<float>(flat(xtr)));
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("xtr.dims(0) = %d\n", xtr.dims(0));
+					mexPrintf("xtr.dims(1) = %d\n", xtr.dims(1));
+					mexPrintf("xtr.summa = %f\n", af::sum<float>(flat(xtr)));
+					mexEvalString("pause(.0001);");
+				}
 				if (computeConsistency && tt >= initialSteps) {
 					storeConsistency(tt, Nt, stepSize, eps, SS, HH, cc, v, sparseR, regularization, Pplus, epsP, computeBayesianP, R[tt % sizeR], RR, S[tt % hnU], complexType, Si, hnU, false);
 				}
@@ -2235,8 +2261,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						else
 							xtp(span, oo % N_lag) = complex(xtr(seq(0, imDimU - 1)), xti(seq(0, imDimU - 1)));
 				}
-				mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
+					mexEvalString("pause(.0001);");
+				}
 				xtr += matmul(KG, SS);
 				if (algorithm == 0 && !steadyKF) {
 					if (complexType == 3)
@@ -2359,9 +2387,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					xt(span, oo + 1, NN) = xtr;
 				}
 
-				mexPrintf("xtr.summa = %f\n", af::sum<float>(flat(xtr)));
-				mexPrintf("xtr.min = %f\n", af::min<float>(abs(flat(xtr))));
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("xtr.summa = %f\n", af::sum<float>(flat(xtr)));
+					mexPrintf("xtr.min = %f\n", af::min<float>(abs(flat(xtr))));
+					mexEvalString("pause(.0001);");
+				}
 				if (regularization > 2) {
 					computeDenoising(xt, imDim, oo, NN, complexType, regularization, Pplus, Pplusi, prior, nIter, Nx, Ny, DimZ, TV, TVi, Ndx, Ndy, Ndz, gamma, beta, betac,
 						huberDelta, weightsHuber, weightsQuad, LL, complexRef, Li, TGV, Type);
@@ -2382,11 +2412,13 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						xlt1(span, end) = join(0, real(xt(seq(0, imDim - 1), oo + 1, NN)), imag(xt(seq(0, imDim - 1), oo + 1, NN)));
 					else
 						xlt1(span, end) = xt(seq(0, imDim - 1), oo + 1, NN);
-					mexPrintf("N_lag = %d\n", N_lag);
-					mexPrintf("oo = %d\n", oo);
-					mexPrintf("xlt1.dims(0) = %d\n", xlt1.dims(0));
-					mexPrintf("xlt1.dims(1) = %d\n", xlt1.dims(1));
-					mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("N_lag = %d\n", N_lag);
+						mexPrintf("oo = %d\n", oo);
+						mexPrintf("xlt1.dims(0) = %d\n", xlt1.dims(0));
+						mexPrintf("xlt1.dims(1) = %d\n", xlt1.dims(1));
+						mexEvalString("pause(.0001);");
+					}
 					for (int64_t to = N_lag - 1; to >= 0; to--) {
 						//if (to == N_lag - 1) {
 						//	//xtp_old = xtp(span, jj);
@@ -2414,9 +2446,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else if (complexType == 3)
 								xlt1(span, to) = join(0, real(xt(seq(0, imDim - 1), oo - ww, NN)), imag(xt(seq(0, imDim - 1), oo - ww, NN))) + matmul(KS[ll], xlt1(span, to + 1) - join(0, real(xt(seq(0, imDim - 1), oo - ww, NN)), imag(xt(seq(0, imDim - 1), oo - ww, NN))));
 						}
-						mexPrintf("xlt1(span, to + 1).summa = %f\n", af::sum<float>(flat(real(xlt1(span, to + 1)))));
-						mexPrintf("xlt1(span, to + 1).summa = %f\n", af::sum<float>(flat(real(xt(seq(0, imDim - 1), oo - ww + 1, NN)))));
-						mexPrintf("ww = %d\n", ww);
+						if (DEBUG) {
+							mexPrintf("xlt1(span, to + 1).summa = %f\n", af::sum<float>(flat(real(xlt1(span, to + 1)))));
+							mexPrintf("xlt1(span, to + 1).summa = %f\n", af::sum<float>(flat(real(xt(seq(0, imDim - 1), oo - ww + 1, NN)))));
+							mexPrintf("ww = %d\n", ww);
+						}
 						ww++;
 						jj--;
 						ll--;
@@ -2455,7 +2489,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				}
 
 				////Pplus(span, oo) = diag(Pplus, 0, true);
-				mexPrintf("tt = %d\n", tt);
+				if (DEBUG) {
+					mexPrintf("tt = %d\n", tt);
+				}
 				//}
 
 			}
@@ -2476,9 +2512,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 			if (computeConsistency) {
 				computeConsistencyTests(cc, Nt, stepSize, initialSteps, v, Nm, eps, epsP, computeBayesianP, complexType, vvi, epsi, epsPi);
 			}
-			mexPrintf("xt.dims(0) = %d\n", xt.dims(0));
-			mexPrintf("xt.dims(1) = %d\n", xt.dims(1));
-			mexPrintf("xt.dims(2) = %d\n", xt.dims(2));
+			if (DEBUG) {
+				mexPrintf("xt.dims(0) = %d\n", xt.dims(0));
+				mexPrintf("xt.dims(1) = %d\n", xt.dims(1));
+				mexPrintf("xt.dims(2) = %d\n", xt.dims(2));
+			}
 			//if (useKineticModel && NDimZ == 1)
 			//	xt = xt(seq(0, xt.dims(0) / 2 - 1), span);
 		}
@@ -2513,9 +2551,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				AA = constant((-(1.f / ensemble_s) * (1.f / (1.f / sqrt(ensemble_s) + 1.f))), ensemble_s, ensembleSize - 1, f32);
 				AA(seq(0, end, ensembleSize + 1)) = 1.f - (1.f / ensemble_s) * (1.f / (1.f / sqrt(ensemble_s) + 1.f));
 				AA(end, span) = -1.f / sqrt(ensemble_s);
-				mexPrintf("AA.dims(0) = %d\n", AA.dims(0));
-				mexPrintf("AA.dims(1) = %d\n", AA.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("AA.dims(0) = %d\n", AA.dims(0));
+				//mexPrintf("AA.dims(1) = %d\n", AA.dims(1));
+				//mexEvalString("pause(.0001);");
 			}
 			const float ensembleF = static_cast<float>(ensembleSize - 1);
 			const float ensembleD = 1.f / ensembleF;
@@ -2542,9 +2580,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							Xi = imag(xt(span, tt, NN));
 						}
 					}
-					mexPrintf("X.dims(0) = %d\n", X.dims(0));
-					mexPrintf("X.dims(1) = %d\n", X.dims(1));
-					mexEvalString("pause(.0001);");
+					//mexPrintf("X.dims(0) = %d\n", X.dims(0));
+					//mexPrintf("X.dims(1) = %d\n", X.dims(1));
+					//mexEvalString("pause(.0001);");
 					computeAPrioriX(useF, useU, useG, useKineticModel, algorithm, X, Xi, imDim, F, Fi, complexType, G, Gi, u, complexF, complexG, tt, sizeF, sizeG, sizeU);
 					if (sparseQ) {
 						if (useEnsembleMean)
@@ -2570,9 +2608,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							X += randn(X.dims(0), ensembleSize) * tile(Q[tt % sizeQ](span, NN), 1, ensembleSize);
 						else
 							X = tile(X, 1, ensembleSize) + randn(X.dims(0), ensembleSize) * tile(Q[tt % sizeQ](span, NN), 1, ensembleSize);
-						mexPrintf("X.dims(0) = %d\n", X.dims(0));
-						mexPrintf("X.dims(1) = %d\n", X.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("X.dims(0) = %d\n", X.dims(0));
+						//mexPrintf("X.dims(1) = %d\n", X.dims(1));
+						//mexEvalString("pause(.0001);");
 						if (complexType == 1)
 							if (!useEnsembleMean)
 								Xi += randn(Xi.dims(0), ensembleSize) * tile(Q[tt % sizeQ](span, NN), 1, ensembleSize);
@@ -2584,9 +2622,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else
 								Xi = tile(Xi, 1, ensembleSize) + randn(Xi.dims(0), ensembleSize) * tile(Qi[tt % sizeQ](span, NN), 1, ensembleSize);
 					}
-					mexPrintf("Xi.dims(0) = %d\n", Xi.dims(0));
-					mexPrintf("Xi.dims(1) = %d\n", Xi.dims(1));
-					mexEvalString("pause(.0001);");
+					//mexPrintf("Xi.dims(0) = %d\n", Xi.dims(0));
+					//mexPrintf("Xi.dims(1) = %d\n", Xi.dims(1));
+					//mexEvalString("pause(.0001);");
 				}
 				if (algorithm >= 3 && algorithm <= 6) {
 					if (algorithm == 4 || algorithm == 3) {
@@ -2655,10 +2693,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								Y = real(m0(seq(nMeas * NN + Nm * (tt), nMeas * NN + Nm * (tt + 1) - 1 + Nm * (window - 1ULL))));
 								Yi = imag(m0(seq(nMeas * NN + Nm * (tt), nMeas * NN + Nm * (tt + 1) - 1 + Nm * (window - 1ULL))));
 							}
-							mexPrintf("Y.dims(0) = %d\n", Y.dims(0));
-							mexPrintf("Y.dims(1) = %d\n", Y.dims(1));
-							mexPrintf("Y.summa = %f\n", af::sum<float>(flat(Y)));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("Y.dims(0) = %d\n", Y.dims(0));
+							//mexPrintf("Y.dims(1) = %d\n", Y.dims(1));
+							//mexPrintf("Y.summa = %f\n", af::sum<float>(flat(Y)));
+							//mexEvalString("pause(.0001);");
 							if (sparseR) {
 								Y = tile(Y, 1, ensembleSize) + matmul(*R1, randn(NmU, ensembleSize));
 								if (complexType == 1)
@@ -2674,17 +2712,17 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 									Yi = tile(Yi, 1, ensembleSize) + tile(*R1i, 1, ensembleSize) * randn(Y.dims(0), ensembleSize);
 							}
 						}
-						mexPrintf("Y.dims(0) = %d\n", Y.dims(0));
-						mexPrintf("Y.dims(1) = %d\n", Y.dims(1));
-						mexPrintf("Y.summa = %f\n", af::sum<float>(flat(Y)));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("Y.dims(0) = %d\n", Y.dims(0));
+						//mexPrintf("Y.dims(1) = %d\n", Y.dims(1));
+						//mexPrintf("Y.summa = %f\n", af::sum<float>(flat(Y)));
+						//mexEvalString("pause(.0001);");
 					}
 					const array A = X - tile(mean(X, 1), 1, X.dims(1));
 					if (algorithm == 3) {
 						//const array PP = matmulNT(A, A) / ensembleF;
-						mexPrintf("A.dims(0) = %d\n", A.dims(0));
-						mexPrintf("A.dims(1) = %d\n", A.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("A.dims(0) = %d\n", A.dims(0));
+						//mexPrintf("A.dims(1) = %d\n", A.dims(1));
+						//mexEvalString("pause(.0001);");
 						computeKG(algorithm, KG, HH, sparseR, R, A / ensembleS, S, tt, hnU, sizeR, tt % hnU, RR, regularization, complexType, Si);
 						if (complexType == 3)
 							if (useEnsembleMean)
@@ -2698,16 +2736,16 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								X = mean(X + matmul(KG, Y - matmul(S[tt % hnU], X)), 1);
 							else
 								X = (X + matmul(KG, Y - matmul(S[tt % hnU], X)));
-						mexPrintf("X.dims(0) = %d\n", X.dims(0));
-						mexPrintf("X.dims(1) = %d\n", X.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("X.dims(0) = %d\n", X.dims(0));
+						//mexPrintf("X.dims(1) = %d\n", X.dims(1));
+						//mexEvalString("pause(.0001);");
 					}
 					else if (algorithm == 4) {
 						//mexPrintf("hnU = %d\n", hnU);
 						//mexPrintf("sizeR = %d\n", sizeR);
 						//mexPrintf("A.dims(0) = %d\n", A.dims(0));
-						mexPrintf("X.summa = %f\n", af::sum<float>(flat(X)));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("X.summa = %f\n", af::sum<float>(flat(X)));
+						//mexEvalString("pause(.0001);");
 						if (complexType == 3)
 							HH = join(0, matmul(S[tt % hnU], A(seq(0, A.dims(0) / 2 - 1), span)) - matmul(Si[tt % hnU], A(seq(A.dims(0) / 2, end), span)),
 								matmul(Si[tt % hnU], A(seq(0, A.dims(0) / 2 - 1), span)) + matmul(S[tt % hnU], A(seq(A.dims(0) / 2, end), span)));
@@ -2716,8 +2754,8 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						//sync();
 						//mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
 						//mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
-						mexPrintf("HH.summa = %f\n", af::sum<float>(flat(HH)));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("HH.summa = %f\n", af::sum<float>(flat(HH)));
+						//mexEvalString("pause(.0001);");
 						PP = matmulNT(HH, HH) / ensembleF;
 						//sync();
 						//mexPrintf("PP.dims(0) = %d\n", PP.dims(0));
@@ -2736,8 +2774,8 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else
 								PP(seq(0, end, PP.dims(0) + 1)) = PP(seq(0, end, PP.dims(0) + 1)) + R[tt % sizeR];
 						}
-						mexPrintf("PP.summa = %f\n", af::sum<float>(flat(inverse(PP))));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("PP.summa = %f\n", af::sum<float>(flat(inverse(PP))));
+						//mexEvalString("pause(.0001);");
 						//sync();
 						//mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
 						//mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
@@ -2794,9 +2832,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else
 								QQ = matmul(HH.T(), tile(R[tt % sizeR], 1, HH.dims(1)) * HH / ensembleF);
 						}
-						mexPrintf("QQ.dims(0) = %d\n", QQ.dims(0));
-						mexPrintf("QQ.dims(1) = %d\n", QQ.dims(1));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("QQ.dims(0) = %d\n", QQ.dims(0));
+							mexPrintf("QQ.dims(1) = %d\n", QQ.dims(1));
+							mexEvalString("pause(.0001);");
+						}
 						//QQ = identity(QQ.dims(0), QQ.dims(0)) + QQ;
 						//mexPrintf("QQ.summa = %f\n", af::sum<float>(flat(QQ)));
 						//mexPrintf("R[tt % sizeR].summa = %f\n", af::sum<float>(flat(R[tt % sizeR])));
@@ -2829,10 +2869,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						//const array M = identity(Z.dims(1), Z.dims(1)) - matmul(HH, solve(QQ, Z)) / ensembleF;
 						//const array M = D - matmul(HH, solve(QQ, Z)) / ensembleF;
 						const array M = D - matmul(HH, solve(QQ, solve(QQ.T(), Z, AF_MAT_LOWER), AF_MAT_UPPER)) / ensembleF;
-						mexPrintf("M.dims(0) = %d\n", M.dims(0));
-						mexPrintf("M.dims(1) = %d\n", M.dims(1));
-						mexPrintf("M.summa = %f\n", af::sum<float>(flat(M)));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("M.dims(0) = %d\n", M.dims(0));
+							mexPrintf("M.dims(1) = %d\n", M.dims(1));
+							mexPrintf("M.summa = %f\n", af::sum<float>(flat(M)));
+							mexEvalString("pause(.0001);");
+						}
 						//M(seq(0, end, M.dims(0) + 1)) = M(seq(0, end, M.dims(0) + 1));
 						if (sparseR)
 							Z = matmulTN(HH, matmul(R[tt % sizeR], M));
@@ -2860,8 +2902,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							X = mean(X + matmul(A, Z) / ensembleF, 1);
 						else
 							X = (X + matmul(A, Z) / ensembleF);
-						mexPrintf("X2.summa = %f\n", af::sum<float>(flat(X)));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("X2.summa = %f\n", af::sum<float>(flat(X)));
+							mexEvalString("pause(.0001);");
+						}
 					}
 					else if (algorithm == 6) {
 						if (complexType == 3)
@@ -2875,9 +2919,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								matmul(Si[tt % hnU], X(seq(0, X.dims(0) / 2 - 1), span)) + matmul(S[tt % hnU], X(seq(X.dims(0) / 2, end), span)));
 						else
 							D = (Y - matmul(S[tt % hnU], X));
-						mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
-						mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
+							mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
+							mexEvalString("pause(.0001);");
+						}
 						array B;
 						if (sparseR) {
 							SR = R[tt % sizeR];
@@ -2894,28 +2940,28 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else
 								SR = R[tt % sizeR];
 							B = tile(SR, 1, HH.dims(1)) * HH;
-							mexPrintf("B.dims(0) = %d\n", B.dims(0));
-							mexPrintf("B.dims(1) = %d\n", B.dims(1));
-							mexPrintf("SR.dims(0) = %d\n", SR.dims(0));
-							mexPrintf("SR.dims(1) = %d\n", SR.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("B.dims(0) = %d\n", B.dims(0));
+							//mexPrintf("B.dims(1) = %d\n", B.dims(1));
+							//mexPrintf("SR.dims(0) = %d\n", SR.dims(0));
+							//mexPrintf("SR.dims(1) = %d\n", SR.dims(1));
+							//mexEvalString("pause(.0001);");
 							array testi2 = matmulTN(B, B);
-							mexPrintf("testi2.dims(0) = %d\n", testi2.dims(0));
-							mexPrintf("testi2.dims(1) = %d\n", testi2.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("testi2.dims(0) = %d\n", testi2.dims(0));
+							//mexPrintf("testi2.dims(1) = %d\n", testi2.dims(1));
+							//mexEvalString("pause(.0001);");
 							array testi = matmul(B, solve(identity(B.dims(1), B.dims(1)) + matmulTN(B, B) / ensembleF, matmulTN(B, tile(SR, 1, D.dims(1)) * D))) / ensembleF;
-							mexPrintf("testi.dims(0) = %d\n", testi.dims(0));
-							mexPrintf("testi.dims(1) = %d\n", testi.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("testi.dims(0) = %d\n", testi.dims(0));
+							//mexPrintf("testi.dims(1) = %d\n", testi.dims(1));
+							//mexEvalString("pause(.0001);");
 							PP = D - matmul(B, solve(identity(B.dims(1), B.dims(1)) + matmulTN(B, B) / ensembleF, matmulTN(B, tile(SR, 1, D.dims(1)) * D))) / ensembleF;
 							//mexPrintf("PP.dims(0) = %d\n", PP.dims(0));
 							//mexPrintf("PP.dims(1) = %d\n", PP.dims(1));
 							//mexEvalString("pause(.0001);");
 							PP = PP * tile(SR, 1, PP.dims(1));
 						}
-						mexPrintf("PP.dims(0) = %d\n", PP.dims(0));
-						mexPrintf("PP.dims(1) = %d\n", PP.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("PP.dims(0) = %d\n", PP.dims(0));
+						//mexPrintf("PP.dims(1) = %d\n", PP.dims(1));
+						//mexEvalString("pause(.0001);");
 						if (useEnsembleMean)
 							X = mean(X + matmul(A, HH.T(), PP) / ensembleF, 1);
 						else
@@ -2938,17 +2984,17 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								Xi = (Xi + matmul(KG, Yi - matmul(S[tt % hnU], Xi)));
 						}
 						else if (algorithm == 4) {
-							mexPrintf("Ai.dims(0) = %d\n", Ai.dims(0));
-							mexPrintf("Ai.dims(1) = %d\n", Ai.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("Ai.dims(0) = %d\n", Ai.dims(0));
+							//mexPrintf("Ai.dims(1) = %d\n", Ai.dims(1));
+							//mexEvalString("pause(.0001);");
 							if (complexS)
 								HH = matmul(Si[tt % hnU], Ai);
 							else
 								HH = matmul(S[tt % hnU], Ai);
 							PP = matmulNT(HH, HH) / ensembleF;
-							mexPrintf("PPi.dims(0) = %d\n", PP.dims(0));
-							mexPrintf("PPi.dims(1) = %d\n", PP.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("PPi.dims(0) = %d\n", PP.dims(0));
+							//mexPrintf("PPi.dims(1) = %d\n", PP.dims(1));
+							//mexEvalString("pause(.0001);");
 							if (sparseR)
 								if (complexType == 1)
 									PP = PP + R[tt % sizeR];
@@ -2967,9 +3013,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 									else
 										PP(seq(0, end, PP.dims(0) + 1)) = PP(seq(0, end, PP.dims(0) + 1)) + Ri[tt % sizeR];
 							}
-							mexPrintf("PPi2.dims(0) = %d\n", PP.dims(0));
-							mexPrintf("PPi2.dims(1) = %d\n", PP.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("PPi2.dims(0) = %d\n", PP.dims(0));
+							//mexPrintf("PPi2.dims(1) = %d\n", PP.dims(1));
+							//mexEvalString("pause(.0001);");
 							if (complexS)
 								if (useEnsembleMean)
 									Xi = (Xi + (1.f / ensembleF) * matmul(Ai, HH.T(), solve(PP, Yi - matmul(Si[tt % hnU], Xi))));
@@ -2986,9 +3032,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								HH = matmul(Si[tt % hnU], Ai);
 							else
 								HH = matmul(S[tt % hnU], Ai);
-							mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
-							mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
+							//mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
+							//mexEvalString("pause(.0001);");
 							if (sparseR)
 								QQ = matmulTN(HH, matmul(R[tt % sizeR], HH));
 							else {
@@ -3005,9 +3051,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							}
 							//QQ(seq(0, end, QQ.dims(0) + 1)) = QQ(seq(0, end, QQ.dims(0) + 1)) + ensembleF;
 							QQ = identity(QQ.dims(0), QQ.dims(0)) + QQ * (1.f / ensembleF);
-							mexPrintf("QQ.dims(0) = %d\n", QQ.dims(0));
-							mexPrintf("QQ.dims(1) = %d\n", QQ.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("QQ.dims(0) = %d\n", QQ.dims(0));
+							//mexPrintf("QQ.dims(1) = %d\n", QQ.dims(1));
+							//mexEvalString("pause(.0001);");
 							//array QA;
 							//cholesky(QA, QQ);
 							array D;
@@ -3025,16 +3071,16 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 									Z = matmul(HH.T(), tile(R[tt % sizeR], 1, D.dims(1)) * D);
 								else
 									Z = matmul(HH.T(), tile(Ri[tt % sizeR], 1, D.dims(1)) * D);
-							mexPrintf("Z.dims(0) = %d\n", Z.dims(0));
-							mexPrintf("Z.dims(1) = %d\n", Z.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("Z.dims(0) = %d\n", Z.dims(0));
+							//mexPrintf("Z.dims(1) = %d\n", Z.dims(1));
+							//mexEvalString("pause(.0001);");
 							const array M = D - matmul(HH, solve(QQ, Z)) * (1.f / ensembleF);
 							//array M = matmul(HH, solve(QA, solve(QA.T(), Z, AF_MAT_LOWER), AF_MAT_UPPER));
 							//M = identity(M.dims(0)) - M;
 							//M(seq(0, end, M.dims(0) + 1)) = M(seq(0, end, M.dims(0) + 1)) + 1.f;
-							mexPrintf("M.dims(0) = %d\n", M.dims(0));
-							mexPrintf("M.dims(1) = %d\n", M.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("M.dims(0) = %d\n", M.dims(0));
+							//mexPrintf("M.dims(1) = %d\n", M.dims(1));
+							//mexEvalString("pause(.0001);");
 							if (regularization == 1)
 								if (complexType == 1)
 									Z = matmulTN(HH, tile(join(0, R[tt % sizeR], constant(1.f, Xi.dims(0), 1) * RR), 1, M.dims(1)) * M);
@@ -3045,9 +3091,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 									Z = matmulTN(HH, tile(R[tt % sizeR], 1, M.dims(1)) * M);
 								else
 									Z = matmulTN(HH, tile(Ri[tt % sizeR], 1, M.dims(1)) * M);
-							mexPrintf("Z.dims(0) = %d\n", Z.dims(0));
-							mexPrintf("Z.dims(1) = %d\n", Z.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("Z.dims(0) = %d\n", Z.dims(0));
+							//mexPrintf("Z.dims(1) = %d\n", Z.dims(1));
+							//mexEvalString("pause(.0001);");
 							if (useEnsembleMean)
 								Xi = mean(Xi + (1.f / ensembleF) * matmul(Ai, Z), 1);
 							else
@@ -3137,9 +3183,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								matmul(Si[tt % hnU], A(seq(0, A.dims(0) / 2 - 1), span)) + matmul(S[tt % hnU], A(seq(A.dims(0) / 2, end), span)));
 						else
 							HH = matmul(S[tt % hnU], A);
-						mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
-						mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
+						//mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
+						//mexEvalString("pause(.0001);");
 						array w;
 						if (sparseR)
 							PP = matmulTN(HH, matmul(R[tt % sizeR], HH));
@@ -3154,17 +3200,17 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else
 								PP = matmulTN(HH, tile(R[tt % sizeR], 1, HH.dims(1)) * HH);
 						PP(seq(0, end, PP.dims(0) + 1)) = PP(seq(0, end, PP.dims(0) + 1)) + fadingAlpha * ensembleF;
-						mexPrintf("PP.dims(0) = %d\n", PP.dims(0));
-						mexPrintf("PP.dims(1) = %d\n", PP.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("PP.dims(0) = %d\n", PP.dims(0));
+						//mexPrintf("PP.dims(1) = %d\n", PP.dims(1));
+						//mexEvalString("pause(.0001);");
 						af::svd(U, SS, V, PP);
-						mexPrintf("SS.dims(0) = %d\n", SS.dims(0));
-						mexPrintf("SS.dims(1) = %d\n", SS.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("SS.dims(0) = %d\n", SS.dims(0));
+						//mexPrintf("SS.dims(1) = %d\n", SS.dims(1));
+						//mexEvalString("pause(.0001);");
 						const array M = std::sqrt(ensembleF) * matmul(U * tile(1.f / sqrt(SS.T()), U.dims(0), 1), U.T());
-						mexPrintf("M.dims(0) = %d\n", M.dims(0));
-						mexPrintf("M.dims(1) = %d\n", M.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("M.dims(0) = %d\n", M.dims(0));
+						//mexPrintf("M.dims(1) = %d\n", M.dims(1));
+						//mexEvalString("pause(.0001);");
 						if (complexType == 3)
 							if (regularization == 1)
 								w = computeWL(U, SS, HH, R, m0(seq(nMeas * NN + Nm * (tt), nMeas * NN + Nm * (tt + 1) - 1 + Nm * (window - 1ULL))), Ly, X, S, tt, sizeR, hnU, sparseR, RR, complexType, Si);
@@ -3176,9 +3222,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else
 								w = computeW(U, SS, HH, R, real(m0(seq(nMeas * NN + Nm * (tt), nMeas * NN + Nm * (tt + 1) - 1 + Nm * (window - 1ULL)))), X, S, tt, sizeR, hnU, sparseR, RR, complexType, Si);
 						//X = mean(tile(mean(X, 1), 1, X.dims(1)) + matmul(A, tile(w, 1, M.dims(1)) + M), 1);
-						mexPrintf("w.dims(0) = %d\n", w.dims(0));
-						mexPrintf("w.dims(1) = %d\n", w.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("w.dims(0) = %d\n", w.dims(0));
+						//mexPrintf("w.dims(1) = %d\n", w.dims(1));
+						//mexEvalString("pause(.0001);");
 						if (useSmoother) {
 							GS[tt % N_lag] = fadingAlpha * matmul(identity(ensembleSize, ensembleSize) - constant(ensembleD2, ensembleSize, ensembleSize), tile(w, 1, M.dims(1)) + M) + ensembleD2;
 							if (kineticModel)
@@ -3207,9 +3253,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						else
 							HH = matmul(S[tt % hnU], LX);
 						array w;
-						mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
-						mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
+						//mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
+						//mexEvalString("pause(.0001);");
 						if (sparseR)
 							PP = matmulTN(HH, matmul(R[tt % sizeR], HH));
 						else
@@ -3222,18 +3268,18 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else
 								PP = matmulTN(HH, tile(R[tt % sizeR], 1, HH.dims(1)) * HH);
 						PP(seq(0, end, PP.dims(0) + 1)) = PP(seq(0, end, PP.dims(0) + 1)) + fadingAlpha * ensembleF;
-						mexPrintf("PP.dims(0) = %d\n", PP.dims(0));
-						mexPrintf("PP.dims(1) = %d\n", PP.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("PP.dims(0) = %d\n", PP.dims(0));
+						//mexPrintf("PP.dims(1) = %d\n", PP.dims(1));
+						//mexEvalString("pause(.0001);");
 						af::svd(U, SS, V, PP);
-						mexPrintf("SS.dims(0) = %d\n", SS.dims(0));
-						mexPrintf("SS.dims(1) = %d\n", SS.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("SS.dims(0) = %d\n", SS.dims(0));
+						//mexPrintf("SS.dims(1) = %d\n", SS.dims(1));
+						//mexEvalString("pause(.0001);");
 						//const array M = std::sqrt(ensembleF) * matmul(batchFunc(U, 1.f / sqrt(SS.T()), batchMul), U.T(), AA.T());
 						const array M = std::sqrt(ensembleF) * matmul(U * tile(1.f / sqrt(SS.T()), U.dims(0), 1), U.T(), AA.T());
-						mexPrintf("M.dims(0) = %d\n", M.dims(0));
-						mexPrintf("M.dims(1) = %d\n", M.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("M.dims(0) = %d\n", M.dims(0));
+						//mexPrintf("M.dims(1) = %d\n", M.dims(1));
+						//mexEvalString("pause(.0001);");
 						if (complexType == 3)
 							if (regularization == 1)
 								w = computeWL(U, SS, HH, R, m0(seq(nMeas * NN + Nm * (tt), nMeas * NN + Nm * (tt + 1) - 1 + Nm * (window - 1ULL))), Ly, X, S, tt, sizeR, hnU, sparseR, RR, complexType, Si);
@@ -3244,9 +3290,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								w = computeWL(U, SS, HH, R, real(m0(seq(nMeas * NN + Nm * (tt), nMeas * NN + Nm * (tt + 1) - 1 + Nm * (window - 1ULL)))), Ly, X, S, tt, sizeR, hnU, sparseR, RR, complexType, Si);
 							else
 								w = computeW(U, SS, HH, R, real(m0(seq(nMeas * NN + Nm * (tt), nMeas * NN + Nm * (tt + 1) - 1 + Nm * (window - 1ULL)))), X, S, tt, sizeR, hnU, sparseR, RR, complexType, Si);
-						mexPrintf("w.dims(0) = %d\n", w.dims(0));
-						mexPrintf("w.dims(1) = %d\n", w.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("w.dims(0) = %d\n", w.dims(0));
+						//mexPrintf("w.dims(1) = %d\n", w.dims(1));
+						//mexEvalString("pause(.0001);");
 						if (useSmoother) {
 							GS[tt % N_lag] = fadingAlpha * matmul(AA, tile(w, 1, M.dims(1)) + M) + ensembleD2;
 							if (kineticModel)
@@ -3265,9 +3311,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								X = mean(tile(mean(X, 1), 1, X.dims(1)) + matmul(LX, tile(w, 1, M.dims(1)) + M), 1);
 							else
 								X = (tile(mean(X, 1), 1, X.dims(1)) + matmul(LX, tile(w, 1, M.dims(1)) + M));
-						mexPrintf("X.dims(0) = %d\n", X.dims(0));
-						mexPrintf("X.dims(1) = %d\n", X.dims(1));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("X.dims(0) = %d\n", X.dims(0));
+							mexPrintf("X.dims(1) = %d\n", X.dims(1));
+							mexEvalString("pause(.0001);");
+						}
 					}
 					if (complexType == 1 || complexType == 2) {
 						if (algorithm == 7) {
@@ -3369,9 +3417,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							PP(seq(0, end, PP.dims(0) + 1)) = PP(seq(0, end, PP.dims(0) + 1)) + fadingAlpha * ensembleF;
 							af::svd(U, SS, V, PP);
 							const array M = std::sqrt(ensembleF) * matmul(U * tile(1.f / sqrt(SS.T()), U.dims(0), 1), U.T(), AA.T());
-							mexPrintf("M.dims(0) = %d\n", M.dims(0));
-							mexPrintf("M.dims(1) = %d\n", M.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("M.dims(0) = %d\n", M.dims(0));
+							//mexPrintf("M.dims(1) = %d\n", M.dims(1));
+							//mexEvalString("pause(.0001);");
 							if (complexRef && augType > 0 && regularization == 1) {
 								if (complexType == 2)
 									if (complexS)
@@ -3399,9 +3447,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 									else
 										w = computeW(U, SS, HH, R, imag(m0(seq(nMeas * NN + Nm * (tt), nMeas * NN + Nm * (tt + 1) - 1 + Nm * (window - 1ULL)))), Xi, S, tt, sizeR, hnU, sparseR, RR, complexType, Si);
 							}
-							mexPrintf("w.dims(0) = %d\n", w.dims(0));
-							mexPrintf("w.dims(1) = %d\n", w.dims(1));
-							mexEvalString("pause(.0001);");
+							//mexPrintf("w.dims(0) = %d\n", w.dims(0));
+							//mexPrintf("w.dims(1) = %d\n", w.dims(1));
+							//mexEvalString("pause(.0001);");
 							if (useSmoother) {
 								GSi[tt % N_lag] = fadingAlpha * matmul(AA, tile(w, 1, M.dims(1)) + M) + ensembleD2;
 								if (kineticModel)
@@ -3421,9 +3469,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 									Xi = mean(tile(mean(Xi, 1), 1, Xi.dims(1)) + matmul(LX, tile(w, 1, M.dims(1)) + M), 1);
 								else
 									Xi = tile(mean(Xi, 1), 1, Xi.dims(1)) + matmul(LX, tile(w, 1, M.dims(1)) + M);
-							mexPrintf("Xi.dims(0) = %d\n", Xi.dims(0));
-							mexPrintf("Xi.dims(1) = %d\n", Xi.dims(1));
-							mexEvalString("pause(.0001);");
+							if (DEBUG) {
+								mexPrintf("Xi.dims(0) = %d\n", Xi.dims(0));
+								mexPrintf("Xi.dims(1) = %d\n", Xi.dims(1));
+								mexEvalString("pause(.0001);");
+							}
 						}
 						if (useEnsembleMean)
 							xt(span, tt + 1, NN) = complex(X, Xi);
@@ -3493,10 +3543,14 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							xlt(span, seq(tt + 1LL - (N_lag), tt), NN) = complex(XSapu(seq(0, XSapu.dims(0) / 2 - 1)), XSapu(seq(XSapu.dims(0) / 2, end)));
 						else
 							xlt(span, seq(tt + 1LL - (N_lag), tt), NN) = XSapu;
-						mexPrintf("tt + 1LL - (N_lag) = %d\n", tt + 1LL - (N_lag));
+						if (DEBUG) {
+							mexPrintf("tt + 1LL - (N_lag) = %d\n", tt + 1LL - (N_lag));
+						}
 					}
 				}
-				mexPrintf("tt = %d\n", tt);
+				if (DEBUG) {
+					mexPrintf("tt = %d\n", tt);
+				}
 			}
 		}
 		else if (algorithm == 9) {
@@ -3521,19 +3575,19 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					PH = matmul(Si[0], Pred);
 				else
 					PH = matmul(S[0], Pred);
-			mexPrintf("PH.dims(0) = %d\n", PH.dims(0));
-			mexPrintf("PH.dims(1) = %d\n", PH.dims(1));
-			mexEvalString("pause(.0001);");
+			//mexPrintf("PH.dims(0) = %d\n", PH.dims(0));
+			//mexPrintf("PH.dims(1) = %d\n", PH.dims(1));
+			//mexEvalString("pause(.0001);");
 			//Pplus = inverse(matmulTN(PH, tile(R[0], 1, PH.dims(1)) * PH) + diag(Pplus, 0, false));
 			//Pplus = inverse(matmulTN(PH, tile(R[0], 1, PH.dims(1)) * PH) + identity(PH.dims(1), PH.dims(1)));
 			//Pplus = (matmulTN(PH, tile(R[0], 1, PH.dims(1)) * PH));
 			//mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
 			//mexPrintf("Pred.summa = %f\n", af::sum<float>(flat(Pred)));
-			mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
-			mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
-			mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
-			mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
-			mexEvalString("pause(.0001);");
+			//mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
+			//mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
+			//mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
+			//mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
+			//mexEvalString("pause(.0001);");
 			if (!useSmoother && regularization != 3) {
 				//Pplus = diag(Pplus, 0, false);
 				//mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
@@ -3544,15 +3598,15 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					mexPrintf("Cholesky failed\n");
 					return;
 				}
-				else
+				else if (DEBUG)
 					mexPrintf("Cholesky succeeded\n");
-				mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
+				//mexEvalString("pause(.0001);");
 				//A = inverse(A);
 				if (complexType == 2)
 					cholesky(Ai, Pplusi);
-				mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
+				//mexEvalString("pause(.0001);");
 			}
 			else
 				Pplus = 1.f / Pplus;
@@ -3684,8 +3738,8 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				//	if (complexType == 2)
 				//		KSi[tt % N_lag] = Pplusi;
 				//}
-				mexPrintf("xt.dims(1) = %d\n", xt.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("xt.dims(1) = %d\n", xt.dims(1));
+				//mexEvalString("pause(.0001);");
 				if (complexType == 1 || complexType == 2) {
 					xtr = real(xt(span, tt, NN));
 					xti = imag(xt(span, tt, NN));
@@ -3694,8 +3748,8 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					xtr = join(0, real(xt(span, tt, NN)), imag(xt(span, tt, NN)));
 				else
 					xtr = xt(span, tt, NN);
-				mexPrintf("xtr.dims(0) = %d\n", xtr.dims(0));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("xtr.dims(0) = %d\n", xtr.dims(0));
+				//mexEvalString("pause(.0001);");
 				computeAPrioriX(useF, useU, useG, useKineticModel, algorithm, xtr, xti, imDim, F, Fi, complexType, G, Gi, u, complexF, complexG, tt, sizeF, sizeG, sizeU);
 				if (useSmoother || regularization == 3) {
 					cholesky(A, Pplus, false);
@@ -3705,20 +3759,20 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					if (complexType == 2)
 						KSi[tt % N_lag] = Ai;
 				}
-				mexPrintf("A.dims(0) = %d\n", A.dims(0));
-				mexPrintf("A.dims(1) = %d\n", A.dims(1));
-				mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
-				mexEvalString("pause(.0001);");
-				mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
-				mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
-				mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
-				mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
-				if (complexS) {
-					mexPrintf("Si[0].dims(0) = %d\n", Si[0].dims(0));
-					mexPrintf("Si[0].dims(1) = %d\n", Si[0].dims(1));
-				}
+				//mexPrintf("A.dims(0) = %d\n", A.dims(0));
+				//mexPrintf("A.dims(1) = %d\n", A.dims(1));
+				//mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
+				//mexEvalString("pause(.0001);");
+				//mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
+				//mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
+				//mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
+				//mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
+				//if (complexS) {
+				//	mexPrintf("Si[0].dims(0) = %d\n", Si[0].dims(0));
+				//	mexPrintf("Si[0].dims(1) = %d\n", Si[0].dims(1));
+				//}
 				//mexPrintf("Pred.summa = %f\n", af::sum<float>(flat(Pred)));
-				mexEvalString("pause(.0001);");
+				//mexEvalString("pause(.0001);");
 				if (complexType == 3) {
 					PH = matmul3(S, Si, Pred, tt % hnU);
 				}
@@ -3727,10 +3781,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					if (complexS)
 						PHi = matmul(Si[tt % hnU], Pred);
 				}
-				mexPrintf("PH.dims(0) = %d\n", PH.dims(0));
-				mexPrintf("PH.dims(1) = %d\n", PH.dims(1));
-				mexPrintf("PH.summa = %f\n", af::sum<float>(flat(PH)));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("PH.dims(0) = %d\n", PH.dims(0));
+				//mexPrintf("PH.dims(1) = %d\n", PH.dims(1));
+				//mexPrintf("PH.summa = %f\n", af::sum<float>(flat(PH)));
+				//mexEvalString("pause(.0001);");
 				if (useF) {
 					if (!useSmoother && regularization != 3)
 						//if (useKineticModel) {
@@ -3781,10 +3835,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							Bi = matmul(Pred, Ai);
 					}
 				}
-				mexPrintf("B.dims(0) = %d\n", B.dims(0));
-				mexPrintf("B.dims(1) = %d\n", B.dims(1));
-				mexPrintf("B.summa = %f\n", af::sum<float>(flat(B)));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("B.dims(0) = %d\n", B.dims(0));
+				//mexPrintf("B.dims(1) = %d\n", B.dims(1));
+				//mexPrintf("B.summa = %f\n", af::sum<float>(flat(B)));
+				//mexEvalString("pause(.0001);");
 				if (sparseQ) {
 					Cred = matmulTN(Pred, matmul(Q[tt % sizeQ], Pred)) - matmul(matmulTN(Pred, matmul(Q[tt % sizeQ], B)), solve(matmulTN(B, matmul(Q[tt % sizeQ], B)) + identity(B.dims(1), B.dims(1)), matmulTN(B, matmul(Q[tt % sizeQ], Pred))));
 					if (complexType == 2)
@@ -3794,18 +3848,18 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					Cred = matmulTN(Pred, tile(Q[tt % sizeQ](span, NN), 1, Pred.dims(1)) * Pred) - matmul(matmulTN(Pred, tile(Q[tt % sizeQ](span, NN), 1, B.dims(1)) * B),
 						solve(matmulTN(B, tile(Q[tt % sizeQ](span, NN), 1, B.dims(1)) * B) + identity(B.dims(1), B.dims(1)), matmulTN(B, tile(Q[tt % sizeQ](span, NN), 1, Pred.dims(1)) * Pred)));
 					//Cred = -matmul(tile(Q[tt % sizeQ](span, NN), 1, B.dims(1)) * B, solve(matmulTN(B, tile(Q[tt % sizeQ](span, NN), 1, B.dims(1)) * B) + identity(B.dims(1), B.dims(1)), B.T() * tile(Q[tt % sizeQ](span, NN).T(), B.dims(1), 1)));
-					mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
-					mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
-					mexEvalString("pause(.0001);");
+					//mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
+					//mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
+					//mexEvalString("pause(.0001);");
 					if (complexType == 2) {
 						Credi = matmulTN(Pred, tile(Qi[tt % sizeQ](span, NN), 1, Pred.dims(1)) * Pred) - matmul(matmulTN(Pred, tile(Qi[tt % sizeQ](span, NN), 1, Bi.dims(1)) * Bi),
 							solve(matmulTN(Bi, tile(Qi[tt % sizeQ](span, NN), 1, Bi.dims(1)) * Bi) + identity(Bi.dims(1), Bi.dims(1)), matmulTN(Bi, tile(Qi[tt % sizeQ](span, NN), 1, Pred.dims(1)) * Pred)));
 					}
 				}
-				mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
-				mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
-				mexPrintf("Cred.summa = %f\n", af::sum<float>(flat(Cred)));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
+				//mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
+				//mexPrintf("Cred.summa = %f\n", af::sum<float>(flat(Cred)));
+				//mexEvalString("pause(.0001);");
 				if (complexType == 3)
 					computeInnovation(regularization, SS, window, m0, nMeas, NN, Nm, tt, S[tt % hnU], xtr, Ly, Si, complexType, hnU);
 				else
@@ -3874,7 +3928,7 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							mexPrintf("Cholesky failed\n");
 							return;
 						}
-						else
+						else if (DEBUG)
 							mexPrintf("Cholesky succeeded\n");
 						//A = inverse(A);
 						//if (complexRef && augType > 0 && regularization == 1)
@@ -3892,16 +3946,16 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						alphaEst = matmul(Pplus, PH.T(), augmentedR(R[tt % sizeR], regularization, RR, xtr.dims(0), complexType) * SS);
 						//alphaEst = matmul(Pplus, PH.T(), R[tt % sizeR] * (real(m0(seq(nMeas * NN + Nm * (tt), nMeas * NN + Nm * (tt + 1) - 1 + Nm * (window - 1ULL)))) - matmul(S[tt % hnU], xtr)));
 					}
-					mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
-					mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
-					mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
-					mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
-					mexPrintf("SS.summa = %f\n", af::sum<float>(flat(SS)));
-					mexEvalString("pause(.0001);");
-					mexPrintf("alphaEst.dims(0) = %d\n", alphaEst.dims(0));
-					mexPrintf("alphaEst.dims(1) = %d\n", alphaEst.dims(1));
-					mexPrintf("alphaEst.summa = %f\n", af::sum<float>(flat(alphaEst)));
-					mexEvalString("pause(.0001);");
+					//mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
+					//mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
+					//mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
+					//mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
+					//mexPrintf("SS.summa = %f\n", af::sum<float>(flat(SS)));
+					//mexEvalString("pause(.0001);");
+					//mexPrintf("alphaEst.dims(0) = %d\n", alphaEst.dims(0));
+					//mexPrintf("alphaEst.dims(1) = %d\n", alphaEst.dims(1));
+					//mexPrintf("alphaEst.summa = %f\n", af::sum<float>(flat(alphaEst)));
+					//mexEvalString("pause(.0001);");
 					xtr += matmul(Pred, alphaEst);
 					if (complexType == 1 || complexType == 2) {
 						if (complexS)
@@ -3945,10 +3999,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else
 								alphaEst = matmul(Pplus, PH.T(), augmentedR(R[tt % sizeR], regularization, RR, xti.dims(0), complexType) * SS);
 						}
-						mexPrintf("alphaEst.dims(0) = %d\n", alphaEst.dims(0));
-						mexPrintf("alphaEst.dims(1) = %d\n", alphaEst.dims(1));
-						mexPrintf("alphaEst.summa = %f\n", af::sum<float>(flat(alphaEst)));
-						mexEvalString("pause(.0001);");
+						if (DEBUG) {
+							mexPrintf("alphaEst.dims(0) = %d\n", alphaEst.dims(0));
+							mexPrintf("alphaEst.dims(1) = %d\n", alphaEst.dims(1));
+							mexPrintf("alphaEst.summa = %f\n", af::sum<float>(flat(alphaEst)));
+							mexEvalString("pause(.0001);");
+						}
 						xti = xti + matmul(Pred, alphaEst);
 					}
 				}
@@ -3961,9 +4017,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						xt(span, tt + 1, NN) = complex(join(0, xtr(seq(0, imDim - 1)), xtr(seq(imDimU, imDimU + imDim - 1))), join(0, xtr(seq(imDim, imDimU - 1)), xtr(seq(imDimU + imDim, end))));
 					else
 						xt(span, tt + 1, NN) = complex(xtr(seq(0, xtr.dims(0) / 2 - 1)), xtr(seq(xtr.dims(0) / 2, end)));
-				mexPrintf("xt.dims(0) = %d\n", xt.dims(0));
-				mexPrintf("regularization = %d\n", regularization);
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("xt.dims(0) = %d\n", xt.dims(0));
+					mexPrintf("regularization = %d\n", regularization);
+					mexEvalString("pause(.0001);");
+				}
 				if (regularization > 2) {
 					computeDenoising(xt, imDim, tt, NN, complexType, regularization, Pplus, Pplusi, prior, nIter, Nx, Ny, DimZ, TV, TVi, Ndx, Ndy, Ndz, gamma, beta, betac,
 						huberDelta, weightsHuber, weightsQuad, LL, complexRef, Li, TGV, Type, Pred);
@@ -3983,8 +4041,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					int64_t gg = tt % sizeG;
 					array xp, xpi, Qx, Qxi;
 					xlt1(span, end) = xt(seq(0, imDim - 1), tt + 1, NN);
-					mexPrintf("tt = %d\n", tt);
-					mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("tt = %d\n", tt);
+						mexEvalString("pause(.0001);");
+					}
 					for (int64_t to = N_lag - 1; to >= 0; to--) {
 						//if (to == N_lag - 1) {
 						//	//xtp_old = xtp(span, jj);
@@ -4008,8 +4068,8 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							xp = real(xlt1(span, to + 1)) - xp;
 						if (complexType == 2 || complexType == 1)
 							xpi = imag(xlt1(span, to + 1)) - xpi;
-						mexPrintf("xp.summa = %f\n", af::sum<float>(flat(xp)));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("xp.summa = %f\n", af::sum<float>(flat(xp)));
+						//mexEvalString("pause(.0001);");
 						if (sparseQ) {
 							Qx = matmul(Q[qq], xp);
 							if (complexType == 2)
@@ -4024,9 +4084,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							else if (complexType == 1)
 								Qxi = Q[qq](span, NN) * xpi;
 						}
-						mexPrintf("Qx.dims(0) = %d\n", Qx.dims(0));
-						mexPrintf("Qx.dims(1) = %d\n", Qx.dims(1));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("Qx.dims(0) = %d\n", Qx.dims(0));
+						//mexPrintf("Qx.dims(1) = %d\n", Qx.dims(1));
+						//mexEvalString("pause(.0001);");
 						if (useF) {
 							//if (useKineticModel) {
 							//	B = matmul(Pred, A);
@@ -4062,10 +4122,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							if (complexType == 2)
 								Credi = Qxi - matmul(tile(Q[tt % sizeQ](span, NN), 1, Bi.dims(1)) * Bi, solve(matmulTN(Bi, tile(Qi[tt % sizeQ](span, NN), 1, Bi.dims(1)) * Bi) + identity(Bi.dims(1), Bi.dims(1)), matmulTN(Bi, Qxi)));
 						}
-						mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
-						mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
-						mexPrintf("Cred.summa = %f\n", af::sum<float>(flat(Cred)));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
+						//mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
+						//mexPrintf("Cred.summa = %f\n", af::sum<float>(flat(Cred)));
+						//mexEvalString("pause(.0001);");
 						if (useF) {
 							//if (useKineticModel) {
 							//	Cred(seq(0, Cred.dims(0) / 2 - 1), span) = matmul(F[ff], Cred);
@@ -4082,10 +4142,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							//}
 						}
 						Cred = matmul(Pred, KS[jj], matmul(KS[jj].T(), Pred.T(), Cred));
-						mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
-						mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
-						mexPrintf("Cred.summa = %f\n", af::sum<float>(flat(Cred)));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
+						//mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
+						//mexPrintf("Cred.summa = %f\n", af::sum<float>(flat(Cred)));
+						//mexEvalString("pause(.0001);");
 						if (complexType == 2)
 							Credi = matmul(Pred, KSi[jj], matmul(KSi[jj].T(), Pred.T(), Credi));
 						if (complexType == 0)
@@ -4097,7 +4157,7 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						else if (complexType == 3)
 							xlt1(span, to) = join(0, real(xt(seq(0, imDim - 1), tt - ww, NN)), imag(xt(seq(0, imDim - 1), tt - ww, NN))) + Cred;
 						ww++;
-						mexPrintf("ww = %d\n", ww);
+						//mexPrintf("ww = %d\n", ww);
 						ll++;
 						ff--;
 						jj--;
@@ -4163,10 +4223,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						KSi[tt % N_lag] = Pplusi;
 				}
 
-				mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
-				mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
-				//mexPrintf("Q.summa = %f\n", af::sum<float>(flat(Q[tt % sizeQ](span, NN))));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
+				//mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
+				////mexPrintf("Q.summa = %f\n", af::sum<float>(flat(Q[tt % sizeQ](span, NN))));
+				//mexEvalString("pause(.0001);");
 				if (tt <= 2ULL) {
 					//	a0 = SS;
 					setSeed(0);
@@ -4179,9 +4239,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					temp = vecmul3(S, Si, a0, tt % hnU, true);
 				else
 					temp = matmul(S[tt % hnU], a0, AF_MAT_TRANS);
-				mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
-				mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
+				//mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
+				//mexEvalString("pause(.0001);");
 				if (sparseQ)
 					temp2 = matmul(Q[tt % sizeQ], temp);
 				else
@@ -4190,25 +4250,25 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					temp2 = vecmul3(S, Si, temp2, tt % hnU, false);
 				else
 					temp2 = matmul(S[tt % hnU], temp2);
-				mexPrintf("temp2.dims(0) = %d\n", temp2.dims(0));
-				mexPrintf("temp2.dims(1) = %d\n", temp2.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("temp2.dims(0) = %d\n", temp2.dims(0));
+				//mexPrintf("temp2.dims(1) = %d\n", temp2.dims(1));
+				//mexEvalString("pause(.0001);");
 				computePminusCG(useF, sparseF, useKineticModel, 0, temp, F[tt % sizeF], Pplus, Pplusi, complexF, Fi[tt % sizeF]);
 				if (complexType == 3)
 					temp = vecmul3(S, Si, temp, tt % hnU, false);
 				else
 					temp = matmul(S[tt % hnU], temp);
-				mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
-				mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
+				//mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
+				//mexEvalString("pause(.0001);");
 				if (sparseR)
 					r0 = matmul(R[tt % sizeR], a0);
 				else
 					r0 = a0 * R[tt % sizeR];
 				r0 = SS - (temp + temp2 + r0);
-				mexPrintf("r0.dims(0) = %d\n", r0.dims(0));
-				mexPrintf("r0.dims(1) = %d\n", r0.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("r0.dims(0) = %d\n", r0.dims(0));
+				//mexPrintf("r0.dims(1) = %d\n", r0.dims(1));
+				//mexEvalString("pause(.0001);");
 				p0 = r0;
 				array V = constant(0.f, NmU, cgIter);
 				array P = constant(0.f, NmU, cgIter);
@@ -4222,9 +4282,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						temp = vecmul3(S, Si, p0, tt % hnU, true);
 					else
 						temp = matmul(S[tt % hnU], p0, AF_MAT_TRANS);
-					mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
-					mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
-					mexEvalString("pause(.0001);");
+					//mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
+					//mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
+					//mexEvalString("pause(.0001);");
 					if (sparseQ)
 						temp2 = matmul(Q[tt % sizeQ], temp);
 					else
@@ -4271,9 +4331,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					temp = vecmul3(S, Si, a0, tt % hnU, true);
 				else
 					temp = matmul(S[tt % hnU], a0, AF_MAT_TRANS);
-				mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
-				mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("temp.dims(0) = %d\n", temp.dims(0));
+				//mexPrintf("temp.dims(1) = %d\n", temp.dims(1));
+				//mexEvalString("pause(.0001);");
 				if (sparseQ)
 					temp2 = matmul(Q[tt % sizeQ], temp);
 				else
@@ -4289,25 +4349,25 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				array alpha = constant(0.f, cgIter, 1);
 
 				v0 = vhat / tile(sqrt(sum(vhat * vhat)), vhat.dims(0), 1);
-				mexPrintf("vhat.dims(0) = %d\n", vhat.dims(0));
-				mexPrintf("vhat.dims(1) = %d\n", vhat.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("vhat.dims(0) = %d\n", vhat.dims(0));
+				//mexPrintf("vhat.dims(1) = %d\n", vhat.dims(1));
+				//mexEvalString("pause(.0001);");
 				temp = v0;
 				computePminusCG(useF, sparseF, useKineticModel, 0, temp, F[tt % sizeF], Pplus, Pplusi, complexF, Fi[tt % sizeF]);
 				if (sparseQ)
 					temp += matmul(Q[tt % sizeQ], v0);
 				else
 					temp += v0 * Q[tt % sizeQ](span, NN);
-				mexPrintf("temp1.dims(0) = %d\n", temp.dims(0));
-				mexPrintf("temp1.dims(1) = %d\n", temp.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("temp1.dims(0) = %d\n", temp.dims(0));
+				//mexPrintf("temp1.dims(1) = %d\n", temp.dims(1));
+				//mexEvalString("pause(.0001);");
 				if (complexType == 3)
 					temp2 = vecmul3(S, Si, matmul(E, E.T(), vecmul3(S, Si, temp, tt % hnU, false)), tt % hnU, true);
 				else
 					temp2 = matmul(S[tt % hnU], matmul(E, E.T(), matmul(S[tt % hnU], temp)), AF_MAT_TRANS);
-				mexPrintf("temp2.dims(0) = %d\n", temp2.dims(0));
-				mexPrintf("temp2.dims(1) = %d\n", temp2.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("temp2.dims(0) = %d\n", temp2.dims(0));
+				//mexPrintf("temp2.dims(1) = %d\n", temp2.dims(1));
+				//mexEvalString("pause(.0001);");
 				if (sparseQ)
 					temp -= matmul(Q[tt % sizeQ], temp2);
 				else
@@ -4821,9 +4881,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				array P = constant(0.f, xtr.dims(0), cgIter);
 				array D = constant(0.f, cgIter, 1);
 				int64_t il = -1;
-				mexPrintf("p0.dims(0) = %d\n", p0.dims(0));
-				mexPrintf("p0.dims(1) = %d\n", p0.dims(1));
-				mexEvalString("pause(.0001);");
+				//mexPrintf("p0.dims(0) = %d\n", p0.dims(0));
+				//mexPrintf("p0.dims(1) = %d\n", p0.dims(1));
+				//mexEvalString("pause(.0001);");
 
 				for (uint32_t ii = 0; ii < cgIter; ii++) {
 					il++;
@@ -4882,10 +4942,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				//mexEvalString("pause(.0001);");
 
 				Pplus = P * tile(D.T(), P.dims(0), 1);
-				mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
-				mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
-				mexPrintf("il = %d\n", il);
-				mexEvalString("pause(.0001);");
+				//mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
+				//mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
+				//mexPrintf("il = %d\n", il);
+				//mexEvalString("pause(.0001);");
 				Pplus = Pplus(span, seq(0, il));
 				xtr = a0;
 				if (complexType == 0)
@@ -4943,9 +5003,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					array P = constant(0.f, xt.dims(0), cgIter);
 					array D = constant(0.f, cgIter, 1);
 					int64_t il = -1;
-					mexPrintf("p0.dims(0) = %d\n", p0.dims(0));
-					mexPrintf("p0.dims(1) = %d\n", p0.dims(1));
-					mexEvalString("pause(.0001);");
+					//mexPrintf("p0.dims(0) = %d\n", p0.dims(0));
+					//mexPrintf("p0.dims(1) = %d\n", p0.dims(1));
+					//mexEvalString("pause(.0001);");
 
 					for (uint32_t ii = 0; ii < cgIter; ii++) {
 						il++;
@@ -5007,10 +5067,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					//}
 
 					Pplusi = P * tile(D.T(), P.dims(0), 1);
-					mexPrintf("Pplusi.dims(0) = %d\n", Pplusi.dims(0));
-					mexPrintf("Pplusi.dims(1) = %d\n", Pplusi.dims(1));
-					mexPrintf("Iil = %d\n", il);
-					mexEvalString("pause(.0001);");
+					//mexPrintf("Pplusi.dims(0) = %d\n", Pplusi.dims(0));
+					//mexPrintf("Pplusi.dims(1) = %d\n", Pplusi.dims(1));
+					//mexPrintf("Iil = %d\n", il);
+					//mexEvalString("pause(.0001);");
 					Pplusi = Pplusi(span, seq(0, il));
 					xti = a0i;
 					xt(span, tt + 1, NN) = complex(xtr, xti);
@@ -5037,11 +5097,13 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					else
 						xlt1(span, end) = xt(seq(0, imDim - 1), tt + 1, NN);
 					array xTemp, xTempi, Pqi, Pq;
-					mexPrintf("N_lag = %d\n", N_lag);
-					mexPrintf("tt = %d\n", tt);
-					mexPrintf("xlt1.dims(0) = %d\n", xlt1.dims(0));
-					mexPrintf("xlt1.dims(1) = %d\n", xlt1.dims(1));
-					mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("N_lag = %d\n", N_lag);
+						mexPrintf("tt = %d\n", tt);
+						mexPrintf("xlt1.dims(0) = %d\n", xlt1.dims(0));
+						mexPrintf("xlt1.dims(1) = %d\n", xlt1.dims(1));
+						mexEvalString("pause(.0001);");
+					}
 					for (int64_t to = N_lag - 1; to >= 0; to--) {
 						if (complexType == 3)
 							xtr = join(0, real(xt(span, tt - ww, NN)), imag(xt(span, tt - ww, NN)));
@@ -5057,19 +5119,19 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						//Pq = xTemp;
 						//if (complexType == 2 || complexType == 1)
 						//	Pqi = xTempi;
-						mexPrintf("xTemp.dims(0) = %d\n", xTemp.dims(0));
-						mexPrintf("xTemp.dims(1) = %d\n", xTemp.dims(1));
-						mexPrintf("xTemp.summa = %f\n", af::sum<float>(flat(xTemp)));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("xTemp.dims(0) = %d\n", xTemp.dims(0));
+						//mexPrintf("xTemp.dims(1) = %d\n", xTemp.dims(1));
+						//mexPrintf("xTemp.summa = %f\n", af::sum<float>(flat(xTemp)));
+						//mexEvalString("pause(.0001);");
 						Pq = matrixInversionP(sparseQ, useF, complexF, complexType, xTemp, xTempi, Q, Qi, F, Fi, NN, qq, ff, KS[jj], KSi[ji]);
 						if (complexType == 2 || complexType == 1) {
 							Pqi = Pq(span, end);
 							Pq = Pq(span, 0);
 						}
-						mexPrintf("Pq3.dims(0) = %d\n", Pq.dims(0));
-						mexPrintf("Pq3.dims(1) = %d\n", Pq.dims(1));
-						mexPrintf("Pq.summa = %f\n", af::sum<float>(flat(Pq)));
-						mexEvalString("pause(.0001);");
+						//mexPrintf("Pq3.dims(0) = %d\n", Pq.dims(0));
+						//mexPrintf("Pq3.dims(1) = %d\n", Pq.dims(1));
+						//mexPrintf("Pq.summa = %f\n", af::sum<float>(flat(Pq)));
+						//mexEvalString("pause(.0001);");
 						if (useF) {
 							Pq = matmul(F[ff], Pq, AF_MAT_TRANS);
 							if (complexType == 2)
@@ -5093,9 +5155,9 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							xlt1(span, to) = complex(real(xt(seq(0, imDim - 1), tt - ww, NN)) + Pq, imag(xt(seq(0, imDim - 1), tt - ww, NN)) + Pqi);
 						else if (complexType == 3)
 							xlt1(span, to) = join(0, real(xt(seq(0, imDim - 1), tt - ww, NN)), imag(xt(seq(0, imDim - 1), tt - ww, NN))) + Pq;
-						mexPrintf("xlt1(span, to + 1).summa = %f\n", af::sum<float>(flat(real(xlt1(span, to + 1)))));
+						//mexPrintf("xlt1(span, to + 1).summa = %f\n", af::sum<float>(flat(real(xlt1(span, to + 1)))));
 						//mexPrintf("xlt1(span, to + 1).summa = %f\n", af::sum<float>(flat(real(xt(seq(0, imDim - 1), tt - ww + 1, NN)))));
-						mexPrintf("ww = %d\n", ww);
+						//mexPrintf("ww = %d\n", ww);
 						ww++;
 						jj--;
 						ji--;
@@ -5151,8 +5213,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 			Pminus = Pplus;
 			if (complexType == 2)
 				Pminusi = Pplusi;
-			mexPrintf("sizeQ = %d\n", sizeQ);
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("sizeQ = %d\n", sizeQ);
+				mexEvalString("pause(.0001);");
+			}
 			for (uint64_t tt = 0ULL; tt < Nt - (window - 1ULL); tt++) {
 
 				//jg++;
@@ -5280,8 +5344,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 	/* Load various parameters */
 	// Are the measurements complex
 	const bool complexMeas = (bool)mxGetScalar(mxGetField(options, 0, "complexMeasurements"));
-	mexPrintf("complexMeas = %u\n", complexMeas);
-	mexEvalString("pause(.0001);");
+	if (DEBUG) {
+		mexPrintf("complexMeas = %u\n", complexMeas);
+		mexEvalString("pause(.0001);");
+	}
 	// Type of algorithm used (regular KF, information filter, etc.)
 	const uint32_t algorithm = (uint32_t)mxGetScalar(mxGetField(options, 0, "algorithm"));
 	// What kind of complex data is used (no complex data, only separate estimates, seperate gains, totally complex)
@@ -5371,8 +5437,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 	TV.TV_use_anatomical = (bool)mxGetScalar(mxGetField(options, 0, "useAnatomical"));
 	// Whether separate anatomical reference images are used for real and imaginary parts (true) or real part for both (false)
 	const bool complexRef = (bool)mxGetScalar(mxGetField(options, 0, "complexRef"));
-	mexPrintf("complexRef = %u\n", complexRef);
-	mexEvalString("pause(.0001);");
+	if (DEBUG) {
+		mexPrintf("complexRef = %u\n", complexRef);
+		mexEvalString("pause(.0001);");
+	}
 	uint64_t DimZ = 1ULL;
 	if (!use3D && Nz > 1)
 		DimZ = Nz;
@@ -5449,9 +5517,11 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 	TGV.rho = (float)mxGetScalar(mxGetField(options, 0, "relaxationParameter"));
 	array m0;
 	array xt;
-	mexPrintf("imDim = %u\n", imDim);
-	mexPrintf("imDimN = %u\n", imDimN);
-	mexEvalString("pause(.0001);");
+	if (DEBUG) {
+		mexPrintf("imDim = %u\n", imDim);
+		mexPrintf("imDimN = %u\n", imDimN);
+		mexEvalString("pause(.0001);");
+	}
 	if (complexMeas) {
 		xt = constant(0.f, imDimN, Nt + 1ULL - (window - 1ULL), DimZ, c32);
 		//const float* HH1 = loadFloats(options, "m0");
@@ -5471,9 +5541,11 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 		const size_t numColsX = mxGetN(mxGetField(options, 0, "x0"));
 		//mexPrintf("numColS = %u\n", numColS);
 		//mexPrintf("numRowS = %u\n", numRowS);
-		mexPrintf("numRowsX = %u\n", numRowsX);
-		mexPrintf("numColsX = %u\n", numColsX);
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("numRowsX = %u\n", numRowsX);
+			mexPrintf("numColsX = %u\n", numColsX);
+			mexEvalString("pause(.0001);");
+		}
 		const size_t numSlicesX = mxGetNumberOfElements(mxGetField(options, 0, "x0")) / (numRowsX * numColsX);
 		//if (complexType == 3) {
 		//	m0 = join(0, array(numRowS, numColS, numEle / (numRowS * numColS), HH1), array(numRowS, numColS, numEle / (numRowS * numColS), HH2));
@@ -5542,10 +5614,12 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			const size_t nNZ = mxGetNzmax(mxGetField(options, 0, "L"));
 			const size_t nCol = mxGetN(mxGetField(options, 0, "L"));
 			const size_t nRow = mxGetM(mxGetField(options, 0, "L"));
-			mexPrintf("nNZ = %u\n", nNZ);
-			mexPrintf("nCol = %u\n", nCol);
-			mexPrintf("nRow = %u\n", nRow);
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("nNZ = %u\n", nNZ);
+				mexPrintf("nCol = %u\n", nCol);
+				mexPrintf("nRow = %u\n", nRow);
+				mexEvalString("pause(.0001);");
+			}
 			const double* Lt = (double*)mxGetData(mxGetField(options, 0, "L"));
 			if (complexRef && complexL) {
 				const double* Lti = (double*)mxGetImagData(mxGetField(options, 0, "L"));
@@ -5564,16 +5638,20 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 				Lvalues = kompleksiset(nNZ, 1, L1.data(), L2.data());
 			else
 				Lvalues = array(nNZ, L1.data(), afHost);
-			mexPrintf("Lvalues.dims(0) = %u\n", Lvalues.dims(0));
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("Lvalues.dims(0) = %u\n", Lvalues.dims(0));
+				mexEvalString("pause(.0001);");
+			}
 		}
 		else if (sparseS) {
 			const size_t nNZ = mxGetNumberOfElements(mxGetField(options, 0, "valL"));
 			const size_t nCol = mxGetNumberOfElements(mxGetField(options, 0, "rowIndL"));
 			const size_t nRow = mxGetNumberOfElements(mxGetField(options, 0, "colIndL"));
-			mexPrintf("nNZ = %u\n", nNZ);
-			mexPrintf("nCol = %u\n", nCol);
-			mexPrintf("nRow = %u\n", nRow);
+			if (DEBUG) {
+				mexPrintf("nNZ = %u\n", nNZ);
+				mexPrintf("nCol = %u\n", nCol);
+				mexPrintf("nRow = %u\n", nRow);
+			}
 			const float* valuesL = loadFloats(options, "valL");
 			const float* valuesLi = (float*)mxGetImagData(mxGetField(options, 0, "valLi"));
 			const int32_t* colL = (int32_t*)mxGetData(mxGetField(options, 0, "colIndL"));
@@ -5603,8 +5681,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			}
 			else
 				Lrow = array(imDim + 1, 1, rowL, afHost);
-			mexPrintf("Lrow.dims(0) = %u\n", Lrow.dims(0));
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("Lrow.dims(0) = %u\n", Lrow.dims(0));
+				mexEvalString("pause(.0001);");
+			}
 			LL = sparse(imDim, imDim, real(Lvalues), Lrow, Lcol);
 			if (complexRef && complexL)
 				LLi = sparse(imDim, imDim, imag(Lvalues), Lrow, Lcol);
@@ -5644,8 +5724,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 					else
 						Lyi = matmul(imag(LL), refImageI);
 				}
-				mexPrintf("Ly.summa = %f\n", af::sum<float>(flat(Ly)));
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("Ly.summa = %f\n", af::sum<float>(flat(Ly)));
+					mexEvalString("pause(.0001);");
+				}
 			}
 		}
 	}
@@ -5654,10 +5736,12 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 		const size_t nCol = mxGetN(mxGetField(options, 0, "H"));
 		const size_t nRow = mxGetM(mxGetField(options, 0, "H"));
 		const double* SS = loadDoubles(options, "H");
-		mexPrintf("nNZ = %u\n", nNZ);
-		mexPrintf("nCol = %u\n", nCol);
-		mexPrintf("nRow = %u\n", nRow);
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("nNZ = %u\n", nNZ);
+			mexPrintf("nCol = %u\n", nCol);
+			mexPrintf("nRow = %u\n", nRow);
+			mexEvalString("pause(.0001);");
+		}
 		S1.resize(nNZ, 0.f);
 		std::transform(SS, SS + nNZ, std::begin(S1), [&](const double& value) { return static_cast<float>(value); });
 		if (complexS && (complexType == 3 || complexType == 2)) {
@@ -5670,8 +5754,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 		std::transform(sRow, sRow + nNZ, std::begin(sRows), [&](const size_t& value) { return static_cast<int32_t>(value); });
 		sCol = reinterpret_cast<size_t*>(mxGetJc(mxGetField(options, 0, "H")));
 		sCols.resize((NmU * window + 1 + lSize) * hnU, 0);
-		mexPrintf("sCols.size() = %d\n", sCols.size());
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("sCols.size() = %d\n", sCols.size());
+			mexEvalString("pause(.0001);");
+		}
 		uint64_t uu = 0ULL;
 		uint64_t ee = 1ULL;
 		int32_t apu = 0;
@@ -5716,7 +5802,9 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			//mexPrintf("ee = %d\n", ee);
 			//mexPrintf("uu = %d\n", uu);
 		}
-		mexPrintf("sCols.size() = %d\n", sCols.size());
+		if (DEBUG) {
+			mexPrintf("sCols.size() = %d\n", sCols.size());
+		}
 		if (storeData) {
 			S.resize(hnU);
 			Svalues = array(nNZ, S1.data(), afHost);
@@ -5726,15 +5814,17 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			}
 			Scol = array(nNZ, 1, sRows.data(), afHost);
 			Srow = array(sCols.size(), sCols.data(), afHost);
-			mexPrintf("Srow.dims(0) = %d\n", Srow.dims(0));
-			mexPrintf("Scol.dims(0) = %d\n", Scol.dims(0));
-			mexPrintf("Svalues.dims(0) = %d\n", Svalues.dims(0));
-			mexPrintf("S.size() = %d\n", S.size());
-			mexPrintf("Nm = %d\n", Nm);
-			mexPrintf("imDim = %d\n", imDim);
-			mexPrintf("(hnU - window + 1) = %d\n", (hnU - window + 1));
-			mexPrintf("hnU = %d\n", hnU);
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("Srow.dims(0) = %d\n", Srow.dims(0));
+				mexPrintf("Scol.dims(0) = %d\n", Scol.dims(0));
+				mexPrintf("Svalues.dims(0) = %d\n", Svalues.dims(0));
+				mexPrintf("S.size() = %d\n", S.size());
+				mexPrintf("Nm = %d\n", Nm);
+				mexPrintf("imDim = %d\n", imDim);
+				mexPrintf("(hnU - window + 1) = %d\n", (hnU - window + 1));
+				mexPrintf("hnU = %d\n", hnU);
+				mexEvalString("pause(.0001);");
+			}
 			for (uint64_t kk = 0ULL; kk < hnU; kk++) {
 				if (window == 1 || (window > 1 && kk < (hnU - window + 1))) {
 					if (regularization == 1)
@@ -5750,12 +5840,14 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 					//mexPrintf("kk = %d\n", kk);
 				}
 				else {
-					mexPrintf("Nm * (window - hnU - kk) = %d\n", Nm * (window - (hnU - kk)));
-					mexPrintf("sCol[Nm * (window - hnU - kk)] = %d\n", sCol[Nm * (window - (hnU - kk))]);
-					mexPrintf("sCol[Nm * kk] = %d\n", sCol[Nm * kk]);
-					mexPrintf("kk = %d\n", kk);
-					mexPrintf("Nm * window * (kk + 1ULL) + kk = %d\n", Nm * window * (kk + 1ULL) + kk);
-					mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("Nm * (window - hnU - kk) = %d\n", Nm * (window - (hnU - kk)));
+						mexPrintf("sCol[Nm * (window - hnU - kk)] = %d\n", sCol[Nm * (window - (hnU - kk))]);
+						mexPrintf("sCol[Nm * kk] = %d\n", sCol[Nm * kk]);
+						mexPrintf("kk = %d\n", kk);
+						mexPrintf("Nm * window * (kk + 1ULL) + kk = %d\n", Nm * window * (kk + 1ULL) + kk);
+						mexEvalString("pause(.0001);");
+					}
 					if (regularization == 1)
 						S[kk] = sparse(lSize + Nm * window, imDimN, join(0, join(0, Svalues(seq(sCol[Nm * kk], end)), Svalues(seq(0, sCol[Nm * (window - (hnU - kk))]))), Lvalues), Srow(seq((Nm * window + lSize) * kk + kk, (Nm * window + lSize) * (kk + 1ULL) + kk)), join(0, join(0, Scol(seq(sCol[Nm * kk], end)), Scol(seq(0, sCol[Nm * (window - (hnU - kk))]))), Lcol));
 					else
@@ -5771,9 +5863,11 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 				//mexPrintf("Nm * window * (kk + 1ULL) + kk = %d\n", Nm* window* (kk + 1ULL) + kk);
 				//mexPrintf("kk = %d\n", kk);
 			}
-			mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
-			mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
+				mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
+				mexEvalString("pause(.0001);");
+			}
 		}
 		else {
 			Svalues = array(sCol[Nm + Nm * (window - 1ULL)], S1.data(), afHost);
@@ -5861,9 +5955,11 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			}
 			else {
 				S[0] = transpose(array(imDimN, Nm * window, SS3));
-				mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
-				mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
+					mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
+					mexEvalString("pause(.0001);");
+				}
 				if (complexS && (complexType == 3 || complexType == 2))
 					Si[0] = transpose(array(imDimN, Nm * window, SS4));
 				//mexPrintf("Si[0].dims(0) = %d\n", Si[0].dims(0));
@@ -5883,8 +5979,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 		const size_t nSQ = mxGetNumberOfElements(mxGetField(options, 0, "Q"));
 		sizeQ = nSQ;
 	}
-	mexPrintf("sizeQ = %u\n", sizeQ);
-	mexEvalString("pause(.0001);");
+	if (DEBUG) {
+		mexPrintf("sizeQ = %u\n", sizeQ);
+		mexEvalString("pause(.0001);");
+	}
 	std::vector<array> Q(sizeQ);
 	std::vector<array> Qi;
 	std::vector<array> Q2;
@@ -5945,10 +6043,12 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 		for (uint64_t tt = 0ULL; tt < sizeQ; tt++) {
 			const size_t nNZ = mxGetNzmax(mxGetCell(mxGetField(options, 0, "Q"), tt));
 			const double* QQ = (double*)mxGetData(mxGetCell(mxGetField(options, 0, "Q"), tt));
-			mexPrintf("nNZQ = %u\n", nNZ);
-			mexPrintf("nColQ = %u\n", nCol);
-			mexPrintf("nRowQ = %u\n", nRow);
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("nNZQ = %u\n", nNZ);
+				mexPrintf("nColQ = %u\n", nCol);
+				mexPrintf("nRowQ = %u\n", nRow);
+				mexEvalString("pause(.0001);");
+			}
 			std::vector<float> Q1(nNZ);
 			std::vector<float> Q22;
 			std::transform(QQ, QQ + nNZ, std::begin(Q1), [&](const double& value) { return static_cast<float>(value); });
@@ -5966,9 +6066,11 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			std::vector<int32_t> qCols(nCol + 1, 0);
 			const size_t* qCol = reinterpret_cast<size_t*>(mxGetJc(mxGetCell(mxGetField(options, 0, "Q"), tt)));
 			std::transform(qCol, qCol + nCol + 1, std::begin(qCols), [&](const size_t& value) { return static_cast<int32_t>(value); });
-			mexPrintf("summa = %f\n", summa);
-			mexPrintf("qCols.size() = %u\n", qCols.size());
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("summa = %f\n", summa);
+				mexPrintf("qCols.size() = %u\n", qCols.size());
+				mexEvalString("pause(.0001);");
+			}
 			if ((complexType == 2 || complexType == 3) && complexQ) {
 				if (complexType == 3) {
 					Qvalues[tt] = join(0, array(nNZ, 1, Q1.data()), array(nNZ, 1, Q22.data()));
@@ -5991,9 +6093,11 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			else
 				Q[tt] = sparse(nCol, nRow, nNZ, Q1.data(), qCols.data(), qRows.data(), f32, AF_STORAGE_CSR, afHost);
 		}
-		mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
-		mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
+			mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
+			mexEvalString("pause(.0001);");
+		}
 		if (algorithm == 10 && useSmoother) {
 			if (complexType == 2 || complexType == 3) {
 				Qvalues2.resize(sizeQ);
@@ -6005,10 +6109,12 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			for (uint64_t tt = 0ULL; tt < sizeQ; tt++) {
 				const size_t nNZ = mxGetNzmax(mxGetCell(mxGetField(options, 0, "Q2"), tt));
 				const double* QQ = (double*)mxGetData(mxGetCell(mxGetField(options, 0, "Q2"), tt));
-				mexPrintf("nNZQ = %u\n", nNZ);
-				mexPrintf("nColQ = %u\n", nCol);
-				mexPrintf("nRowQ = %u\n", nRow);
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("nNZQ = %u\n", nNZ);
+					mexPrintf("nColQ = %u\n", nCol);
+					mexPrintf("nRowQ = %u\n", nRow);
+					mexEvalString("pause(.0001);");
+				}
 				std::vector<float> Q1(nNZ);
 				std::vector<float> Q22;
 				std::transform(QQ, QQ + nNZ, std::begin(Q1), [&](const double& value) { return static_cast<float>(value); });
@@ -6023,8 +6129,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 				std::vector<int32_t> qCols(nCol + 1, 0);
 				const size_t* qCol = reinterpret_cast<size_t*>(mxGetJc(mxGetCell(mxGetField(options, 0, "Q2"), tt)));
 				std::transform(qCol, qCol + nCol + 1, std::begin(qCols), [&](const size_t& value) { return static_cast<int32_t>(value); });
-				mexPrintf("qCols.size() = %u\n", qCols.size());
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("qCols.size() = %u\n", qCols.size());
+					mexEvalString("pause(.0001);");
+				}
 				if ((complexType == 2 || complexType == 3) && complexQ) {
 					if (complexType == 3) {
 						Qvalues2[tt] = join(0, array(nNZ, 1, Q1.data()), array(nNZ, 1, Q22.data()));
@@ -6066,8 +6174,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 		if (complexType == 2)
 			R2i.resize(sizeR);
 	}
-	mexPrintf("sizeR = %u\n", sizeR);
-	mexEvalString("pause(.0001);");
+	if (DEBUG) {
+		mexPrintf("sizeR = %u\n", sizeR);
+		mexEvalString("pause(.0001);");
+	}
 	if (!sparseR) {
 		const float* nvr = loadFloats(options, "R");
 		if (complexType == 2 || complexType == 3 || complexType == 4) {
@@ -6123,10 +6233,12 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 		for (uint64_t tt = 0ULL; tt < sizeR; tt++) {
 			const size_t nNZ = mxGetNzmax(mxGetCell(mxGetField(options, 0, "R"), tt));
 			const double* RR = (double*)mxGetData(mxGetCell(mxGetField(options, 0, "R"), tt));
-			mexPrintf("nNZR = %u\n", nNZ);
-			mexPrintf("nColR = %u\n", nCol);
-			mexPrintf("nRowR = %u\n", nRow);
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("nNZR = %u\n", nNZ);
+				mexPrintf("nColR = %u\n", nCol);
+				mexPrintf("nRowR = %u\n", nRow);
+				mexEvalString("pause(.0001);");
+			}
 			std::vector<float> R1(nNZ);
 			std::vector<float> R12;
 			std::transform(RR, RR + nNZ, std::begin(R1), [&](const double& value) { return static_cast<float>(value); });
@@ -6174,10 +6286,12 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			for (uint64_t tt = 0ULL; tt < sizeR; tt++) {
 				const size_t nNZ = mxGetNzmax(mxGetCell(mxGetField(options, 0, "R2"), tt));
 				const double* RR = (double*)mxGetData(mxGetCell(mxGetField(options, 0, "R2"), tt));
-				mexPrintf("nNZR = %u\n", nNZ);
-				mexPrintf("nColR = %u\n", nCol);
-				mexPrintf("nRowR = %u\n", nRow);
-				mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("nNZR = %u\n", nNZ);
+					mexPrintf("nColR = %u\n", nCol);
+					mexPrintf("nRowR = %u\n", nRow);
+					mexEvalString("pause(.0001);");
+				}
 				std::vector<float> R1(nNZ);
 				std::vector<float> R12;
 				std::transform(RR, RR + nNZ, std::begin(R1), [&](const double& value) { return static_cast<float>(value); });
@@ -6222,8 +6336,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 	if (algorithm <= 2 || algorithm == 9) {
 		const float* nfr = (float*)mxGetData(mxGetField(options, 0, "P0"));
 		const size_t nRowP = mxGetNumberOfElements(mxGetField(options, 0, "P0"));
-		mexPrintf("nRowP = %d\n", nRowP);
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("nRowP = %d\n", nRowP);
+			mexEvalString("pause(.0001);");
+		}
 		if (complexType == 2 || complexType == 3) {
 			const float* nfi = (float*)mxGetImagData(mxGetField(options, 0, "P0"));
 			if (complexType == 2) {
@@ -6246,15 +6362,19 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			}
 			else
 				Pplus = diag(array(nRowP, 1, nfr, afHost), 0, false);
-		mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
-		mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
+			mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
+			mexEvalString("pause(.0001);");
+		}
 	}
 	else if (algorithm == 10 || algorithm == 11) {
 		const size_t nRowP = mxGetM(mxGetField(options, 0, "P0"));
 		const size_t nColP = mxGetN(mxGetField(options, 0, "P0"));
-		mexPrintf("nRowP = %d\n", nRowP);
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("nRowP = %d\n", nRowP);
+			mexEvalString("pause(.0001);");
+		}
 		if (complexType <= 2) {
 			Pplus = array(nRowP, nColP, (float*)mxGetData(mxGetField(options, 0, "P0")), afHost);
 			if ((algorithm == 11 && complexType == 1) || complexType == 2)
@@ -6288,8 +6408,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 	uint64_t sizeF = 1ULL;
 	std::vector<array> Fi;
 	std::vector<array> Fvalues, Fvaluesi, Frow, Fcol;
-	mexPrintf("sparseF = %u\n", sparseF);
-	mexEvalString("pause(.0001);");
+	if (DEBUG) {
+		mexPrintf("sparseF = %u\n", sparseF);
+		mexEvalString("pause(.0001);");
+	}
 	if (useF || useKineticModel) {
 		if (useKineticModel) {
 			const float* Fval = loadFloats(options, "F");
@@ -6309,8 +6431,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			F.resize(sizeF);
 			//if (complexType == 2)
 			Fi.resize(sizeF);
-			mexPrintf("sizeF = %u\n", sizeF);
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("sizeF = %u\n", sizeF);
+				mexEvalString("pause(.0001);");
+			}
 			if (sparseF) {
 				const size_t nCol = mxGetN(mxGetCell(mxGetField(options, 0, "F"), 0));
 				const size_t nRow = mxGetM(mxGetCell(mxGetField(options, 0, "F"), 0));
@@ -6324,10 +6448,12 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 				for (uint64_t tt = 0ULL; tt < sizeF; tt++) {
 					const size_t nNZ = mxGetNzmax(mxGetCell(mxGetField(options, 0, "F"), tt));
 					const double* FF = (double*)mxGetData(mxGetCell(mxGetField(options, 0, "F"), tt));
-					mexPrintf("nNZF = %u\n", nNZ);
-					mexPrintf("nColF = %u\n", nCol);
-					mexPrintf("nRowF = %u\n", nRow);
-					mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("nNZF = %u\n", nNZ);
+						mexPrintf("nColF = %u\n", nCol);
+						mexPrintf("nRowF = %u\n", nRow);
+						mexEvalString("pause(.0001);");
+					}
 					std::vector<float> F1(nNZ, 0.f);
 					std::vector<float> F2;
 					std::transform(FF, FF + nNZ, std::begin(F1), [&](const double& value) { return static_cast<float>(value); });
@@ -6396,8 +6522,10 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			u = array(imDimN, sizeU, uu);
 		}
 	}
-	mexPrintf("useU = %u\n", useU);
-	mexEvalString("pause(.0001);");
+	if (DEBUG) {
+		mexPrintf("useU = %u\n", useU);
+		mexEvalString("pause(.0001);");
+	}
 
 	const bool useG = (bool)mxGetScalar(mxGetField(options, 0, "useG"));
 	const bool sparseG = (bool)mxGetScalar(mxGetField(options, 0, "sparseG"));
@@ -6425,9 +6553,11 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			for (uint64_t tt = 0ULL; tt < sizeG; tt++) {
 				const size_t nNZ = mxGetNzmax(mxGetCell(mxGetField(options, 0, "G"), tt));
 				const double* GG = (double*)mxGetData(mxGetCell(mxGetField(options, 0, "G"), tt));
-				mexPrintf("nNZ = %u\n", nNZ);
-				mexPrintf("nCol = %u\n", nCol);
-				mexPrintf("nRow = %u\n", nRow);
+				if (DEBUG) {
+					mexPrintf("nNZ = %u\n", nNZ);
+					mexPrintf("nCol = %u\n", nCol);
+					mexPrintf("nRow = %u\n", nRow);
+				}
 				std::vector<float> G1(nNZ);
 				std::vector<float> G2;
 				std::transform(GG, GG + nNZ, std::begin(G1), [&](const double& value) { return static_cast<float>(value); });
@@ -6482,9 +6612,11 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 		const uint64_t covDimX = (uint64_t)mxGetScalar(mxGetField(options, 0, "covDimX"));
 		const uint64_t covDimY = (uint64_t)mxGetScalar(mxGetField(options, 0, "covDimY"));
 		const uint64_t covDimZ = (uint64_t)mxGetScalar(mxGetField(options, 0, "covDimZ"));
-		mexPrintf("covDimX = %d\n", covDimX);
-		mexPrintf("covDimY = %d\n", covDimY);
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("covDimX = %d\n", covDimX);
+			mexPrintf("covDimY = %d\n", covDimY);
+			mexEvalString("pause(.0001);");
+		}
 		if (covDimZ == 1) {
 			const size_t nCol = mxGetN(mxGetField(options, 0, "Sigma"));
 			const size_t nRow = mxGetM(mxGetField(options, 0, "Sigma"));
@@ -6492,32 +6624,40 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 			const size_t nSlice = (nCol * nRow) / nEle;
 			Sigma = array(nRow, nCol, nSlice, (float*)mxGetData(mxGetField(options, 0, "Sigma")));
 			af::svd(Ured, Sred, V, Sigma);
-			mexPrintf("Ured.dims(0) = %d\n", Ured.dims(0));
-			mexPrintf("Ured.dims(1) = %d\n", Ured.dims(1));
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("Ured.dims(0) = %d\n", Ured.dims(0));
+				mexPrintf("Ured.dims(1) = %d\n", Ured.dims(1));
+				mexEvalString("pause(.0001);");
+			}
 			const uint64_t nBasis = (uint64_t)mxGetScalar(mxGetField(options, 0, "reducedBasisN"));
 			XX = array(Nx, Ny, (float*)mxGetData(mxGetField(options, 0, "XX")));
 			YY = array(Nx, Ny, (float*)mxGetData(mxGetField(options, 0, "YY")));
 			PredApu = moddims(tile(sqrt(Sred(seq(0, nBasis)).T()), Ured.dims(0), 1) * Ured(span, seq(0, nBasis)), covDimX, covDimY, nBasis + 1);
-			mexPrintf("PredApu.dims(0) = %d\n", PredApu.dims(0));
-			mexPrintf("PredApu.dims(1) = %d\n", PredApu.dims(1));
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("PredApu.dims(0) = %d\n", PredApu.dims(0));
+				mexPrintf("PredApu.dims(1) = %d\n", PredApu.dims(1));
+				mexEvalString("pause(.0001);");
+			}
 			//array testi = approx2(PredApu(span, 0), XX, YY);
 			//mexPrintf("testi.dims(0) = %d\n", testi.dims(0));
 			//mexPrintf("testi.dims(1) = %d\n", testi.dims(1));
-			mexEvalString("pause(.0001);");
+			//mexEvalString("pause(.0001);");
 			Pred = constant(0.f, Nx, Ny, nBasis + 1ULL);
-			mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
-			mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
+				mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
+				mexEvalString("pause(.0001);");
+			}
 			af::sync();
 			//gfor(seq i, nBasis + 1)
 			for (int64_t i = 0; i <= nBasis; i++)
 				Pred(span, span, i) = approx2(PredApu(span, span, i), XX, YY);
-			mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
-			mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
-			mexPrintf("Pred.dims(2) = %d\n", Pred.dims(2));
-			mexEvalString("pause(.0001);");
+			if (DEBUG) {
+				mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
+				mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
+				mexPrintf("Pred.dims(2) = %d\n", Pred.dims(2));
+				mexEvalString("pause(.0001);");
+			}
 			Pred = moddims(Pred, Pred.dims(0) * Pred.dims(1), Pred.dims(2));
 			if (useKineticModel)
 				Pred = join(1, join(0, Pred, constant(0.f, Pred.dims(0), Pred.dims(1))), join(0, constant(0.f, Pred.dims(0), Pred.dims(1)), Pred));
@@ -6538,11 +6678,13 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 		else
 			xlt = constant(0, imDim, Nt - (window - 1ULL), DimZ, c32);
 	}
-	mexPrintf("useG = %u\n", useG);
-	mexEvalString("pause(.0001);");
+	if (DEBUG) {
+		mexPrintf("useG = %u\n", useG);
+		mexEvalString("pause(.0001);");
 
-	mexPrintf("S[0].dims(0)1 = %d\n", S[0].dims(0));
-	mexPrintf("S[0].dims(1)1 = %d\n", S[0].dims(1));
+		mexPrintf("S[0].dims(0)1 = %d\n", S[0].dims(0));
+		mexPrintf("S[0].dims(1)1 = %d\n", S[0].dims(1));
+	}
 
 	array PP;
 	if (storeCovariance == 1)
@@ -6560,9 +6702,11 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 
 	af::sync();
 	if (complexType > 0) {
-		mexPrintf("xt.dims(0) = %u\n", xt.dims(0));
-		mexPrintf("xt.dims(1) = %u\n", xt.dims(1));
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("xt.dims(0) = %u\n", xt.dims(0));
+			mexPrintf("xt.dims(1) = %u\n", xt.dims(1));
+			mexEvalString("pause(.0001);");
+		}
 		//const mwSize dims[2] = { static_cast<mwSize>(xt.dims(0)), static_cast<mwSize>(xt.dims(1)) };
 		//output[0] = mxCreateNumericMatrix(imDim, Nt + 1ULL, mxSINGLE_CLASS, mxCOMPLEX);
 
