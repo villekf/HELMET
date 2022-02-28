@@ -1,6 +1,6 @@
 function installKF(varargin)
 % Compiles the necessary mex-files for HELMET
-if isempty(varargin) && isempty(varargin{1})
+if isempty(varargin) || isempty(varargin{1})
     if ispc
         if exist('OCTAVE_VERSION','builtin') == 5
             proggis1_orig = 'Program Files';
@@ -43,7 +43,7 @@ else
     af_path_include = [af_path '/include/'];
 end
 
-folder = fileparts(which('installMexKF.m'));
+folder = fileparts(which('installKF.m'));
 folder = strrep(folder, '\','/');
 af_path = strrep(af_path, '\','/');
 af_path_include = strrep(af_path_include, '\','/');
@@ -113,13 +113,13 @@ if exist('OCTAVE_VERSION','builtin') == 0
             movefile('computeKFOMEGA.mex', [folder '/OMEGAKF_CUDA.mex'],'f');
         else
             if ispc
-                movefile('ArrayFire_OpenCL_device_info.mexw64', [folder '/ArrayFire_CUDA_device_info.mexw64'],'f');
-                movefile('OMEGASVD.mexw64', [folder '/OMEGASVD_CUDA.mexw64'],'f');
-                movefile('computeKFOMEGA.mexw64', [folder '/OMEGAKF_CUDA.mexw64'],'f');
+                movefile([folder '/ArrayFire_OpenCL_device_info.mexw64'], [folder '/ArrayFire_CUDA_device_info.mexw64'],'f');
+%                 movefile('OMEGASVD.mexw64', [folder '/OMEGASVD_CUDA.mexw64'],'f');
+%                 movefile('computeKFOMEGA.mexw64', [folder '/OMEGAKF_CUDA.mexw64'],'f');
             else
-                movefile('ArrayFire_OpenCL_device_info.mexa64', [folder '/ArrayFire_CUDA_device_info.mexa64'],'f');
-                movefile('OMEGASVD.mexa64', [folder '/OMEGASVD_CUDA.mexa64'],'f');
-                movefile('computeKFOMEGA.mexa64', [folder '/OMEGAKF_CUDA.mexa64'],'f');
+                movefile([folder '/ArrayFire_OpenCL_device_info.mexa64'], [folder '/ArrayFire_CUDA_device_info.mexa64'],'f');
+%                 movefile('OMEGASVD.mexa64', [folder '/OMEGASVD_CUDA.mexa64'],'f');
+%                 movefile('computeKFOMEGA.mexa64', [folder '/OMEGAKF_CUDA.mexa64'],'f');
             end
         end
         disp('CUDA support enabled')
@@ -140,13 +140,13 @@ if exist('OCTAVE_VERSION','builtin') == 0
             movefile('computeKFOMEGA.mex', [folder '/OMEGAKF_CUDA.mex'],'f');
         else
             if ispc
-                movefile('ArrayFire_OpenCL_device_info.mexw64', [folder '/ArrayFire_CPU_device_info.mexw64'],'f');
-                movefile('OMEGASVD.mexw64', [folder '/OMEGASVD_CPU.mexw64'],'f');
-                movefile('computeKFOMEGA.mexw64', [folder '/OMEGAKF_CPU.mexw64'],'f');
+                movefile([folder '/ArrayFire_OpenCL_device_info.mexw64'], [folder '/ArrayFire_CPU_device_info.mexw64'],'f');
+%                 movefile('OMEGASVD.mexw64', [folder '/OMEGASVD_CPU.mexw64'],'f');
+%                 movefile('computeKFOMEGA.mexw64', [folder '/OMEGAKF_CPU.mexw64'],'f');
             else
-                movefile('ArrayFire_OpenCL_device_info.mexa64', [folder '/ArrayFire_CPU_device_info.mexa64'],'f');
-                movefile('OMEGASVD.mexa64', [folder '/OMEGASVD_CPU.mexa64'],'f');
-                movefile('computeKFOMEGA.mexa64', [folder '/OMEGAKF_CPU.mexa64'],'f');
+                movefile([folder '/ArrayFire_OpenCL_device_info.mexa64'], [folder '/ArrayFire_CPU_device_info.mexa64'],'f');
+%                 movefile('OMEGASVD.mexa64', [folder '/OMEGASVD_CPU.mexa64'],'f');
+%                 movefile('computeKFOMEGA.mexa64', [folder '/OMEGAKF_CPU.mexa64'],'f');
             end
         end
         disp('CPU support enabled')
@@ -161,21 +161,21 @@ if exist('OCTAVE_VERSION','builtin') == 0
             [folder '/OMEGASVD.cpp'])
         mex(compiler, '-largeArrayDims', '-outdir', folder, '-lafopencl', ['-L"' af_path '/lib"'], ['-L"' af_path '/lib64"'], ['-I ' folder], ['-I"' af_path_include '"'], ...
             [folder '/ArrayFire_OpenCL_device_info.cpp'])
-        if exist('OCTAVE_VERSION','builtin') == 5
-            movefile('ArrayFire_OpenCL_device_info.mex', [folder '/ArrayFire_OpenCL_device_info.mex'],'f');
-            movefile('OMEGASVD.mex', [folder '/OMEGASVD_OpenCL.mex'],'f');
-            movefile('computeKFOMEGA.mex', [folder '/OMEGAKF_CUDA.mex'],'f');
-        else
-            if ispc
-                movefile('ArrayFire_OpenCL_device_info.mexw64', [folder '/ArrayFire_OpenCL_device_info.mexw64'],'f');
-                movefile('OMEGASVD.mexw64', [folder '/OMEGASVD_OpenCL.mexw64'],'f');
-                movefile('computeKFOMEGA.mexw64', [folder '/OMEGAKF_OpenCL.mexw64'],'f');
-            else
-                movefile('ArrayFire_OpenCL_device_info.mexa64', [folder '/ArrayFire_OpenCL_device_info.mexa64'],'f');
-                movefile('OMEGASVD.mexa64', [folder '/OMEGASVD_OpenCL.mexa64'],'f');
-                movefile('computeKFOMEGA.mexa64', [folder '/OMEGAKF_OpenCL.mexa64'],'f');
-            end
-        end
+%         if exist('OCTAVE_VERSION','builtin') == 5
+%             movefile('ArrayFire_OpenCL_device_info.mex', [folder '/ArrayFire_OpenCL_device_info.mex'],'f');
+%             movefile('OMEGASVD.mex', [folder '/OMEGASVD_OpenCL.mex'],'f');
+%             movefile('computeKFOMEGA.mex', [folder '/OMEGAKF_CUDA.mex'],'f');
+%         else
+%             if ispc
+%                 movefile('ArrayFire_OpenCL_device_info.mexw64', [folder '/ArrayFire_OpenCL_device_info.mexw64'],'f');
+%                 movefile('OMEGASVD.mexw64', [folder '/OMEGASVD_OpenCL.mexw64'],'f');
+%                 movefile('computeKFOMEGA.mexw64', [folder '/OMEGAKF_OpenCL.mexw64'],'f');
+%             else
+%                 movefile('ArrayFire_OpenCL_device_info.mexa64', [folder '/ArrayFire_OpenCL_device_info.mexa64'],'f');
+%                 movefile('OMEGASVD.mexa64', [folder '/OMEGASVD_OpenCL.mexa64'],'f');
+%                 movefile('computeKFOMEGA.mexa64', [folder '/OMEGAKF_OpenCL.mexa64'],'f');
+%             end
+%         end
         disp('OpenCL support enabled')
     catch
         warning('OpenCL support not enabled')
