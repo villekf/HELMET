@@ -12,6 +12,18 @@ For "high dimension" the number of estimates (states) is considered to be > 1000
 
 See the [documentation](https://github.com/villekf/HELMET/blob/main/documentation.pdf) for help.
 
+# System Requirements
+
+ArrayFire is required (https://arrayfire.com/download/).
+
+MATLAB R2009a or later is mandatory.
+
+For Windows Visual Studio 2022, 2019, 2017 is recommended with "Desktop development with C++", no other options are required. https://visualstudio.microsoft.com/
+
+For Linux it is recommended to use GCC which usually comes bundled with the system. 
+
+On MacOS Xcode is required https://apps.apple.com/us/app/xcode/id497799835?mt=12.
+
 # Installation
 
 This software uses ArrayFire library for all the KF computations. You can find AF binaries from here:  
@@ -40,3 +52,25 @@ Intel runtimes can be found here:
 https://software.intel.com/en-us/articles/opencl-drivers
 
 Installing/building ArrayFire to the default location (`C:\Program Files\ArrayFire` on Windows, `/opt/arrayfire/` on Linux/MacOS) should cause `installKF` to automatically locate everything. However, in both cases you need to add the library paths to the system PATH. On Windows you will be prompted for this during the installation, for Linux you need to add `/opt/arrayfire/lib` (bulding from source) or `/opt/arrayfire/lib64` (installer) to the library path (e.g. `sudo ldconfig /opt/arrayfire/lib64/`). Alternatively, on Linux, you can also build/install it directly into the `/usr/local/` folder (requires sudo rights) thus avoiding the need to add to the system path.
+
+# Known Issues and Limitations
+
+Due to ArrayFire bugs, OpenCL might not work with algorithms requiring inverse matrices.
+
+# Reporting Bugs and Feature Requests
+
+For any bug reports I recommend posting an issue on GitHub. For proper analysis I need the main-file that you have used and if you have used GATE data then also the macros. Preferably also all possible .mat files created, especially if the problem occurs in the reconstruction phase.
+
+For feature requests, post an issue on GitHub. I do not guarantee that a specific feature will be added in the future.
+
+
+# Citations
+
+If you wish to use this software in your work, for the moment cite this page. In the future, a proper publication is planned.
+
+
+# Acknowledgments
+
+Almost all code by Ville-Veikko Wettenhovi. Other relevant sources have been cited in the code. Portions from the [OMEGA](https://github.com/villekf/OMEGA) software are also used in this toolbox. 
+
+This work has been supported by the [University of Eastern Finland](https://www.uef.fi/en) and Academy of Finland.
