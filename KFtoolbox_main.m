@@ -4,7 +4,7 @@
 % should be MATLAB/Octave sparse matrices. For more details on the various
 % options see the documentation.
 
-%%% KF Type
+%%%%%%%%%%%%%% KF Type %%%%%%%%%%%%%%
 % This specifies the type of KF algorithm used. Many of these algorithms
 % have their own specific properties that can be adjusted below.
 % 0 = Regular (discrete) Kalman filter (KF)
@@ -19,9 +19,10 @@
 % 9 = Dimension reduction KF
 % 10 = Conjugate gradient KF
 % 11 = Variational CG KF
+% 12 = Spectral KF
 options.algorithm = 0;
 
-%%% Complex data type
+%%%%%%%%%%%%%% Complex data type %%%%%%%%%%%%%%
 % Here you can specify whether the input measurement data is complex or not
 % and how to compute the KF estimates when using complex data
 % 0 = No complex data (all data is real valued)
@@ -37,7 +38,7 @@ options.algorithm = 0;
 % 4 = Everything is complex valued (does not support sparse matrices)
 options.complexType = 0;
 
-%%% Regularization type
+%%%%%%%%%%%%%% Regularization type %%%%%%%%%%%%%%
 % Here you can select the type of (spatial) regularization used
 % 0 = No regularization
 % 1 = Augmented KF (AKF)
@@ -84,8 +85,6 @@ options.augType = 0;
 % 2 = TV type 2
 % 3 = APLS
 % 4 = SATV
-% 5 = Quadratic
-% 6 = Huber
 % 7 = Regularization matrix L (AKF/SPKF parameters affect this L, i.e.
 % matrix type) 
 % 8 = TGV denoising (does not support weighting matrix)
@@ -111,25 +110,6 @@ options.lambda2 = 0.002;
 options.relaxationParameter = 1.99;
 % Proximal value for TGV
 options.proximalValue = 0.01;
-% Huber delta
-% Delta value for Huber
-options.huberDelta = 1;
-% How many neighboring pixels are considered 
-% Quadratic and Huber prior ONLY
-% E.g. if Ndx = 1, Ndy = 1, Ndz = 0, then you have 3x3 square area where
-% the pixels are taken into account (I.e. (Ndx*2+1)x(Ndy*2+1)x(Ndz*2+1)
-% area).
-% NOTE: Currently Ndx and Ndy must be identical.
-options.Ndx = 1;
-options.Ndy = 1;
-options.Ndz = 0;
-% Pixel weights for quadratic/Huber prior
-% The number of pixels need to be the amount of neighboring pixels,
-% e.g. if the above Nd values are all 1, then 27 weights need to be
-% included where the center pixel (if Nd values are 1, element 14) should
-% be Inf. Size is (Ndx*2+1) * (Ndy*2+1) * (Ndz*2+1). If left empty then
-% they will be calculated by the toolbox and are based on the distance of
-% the voxels from the center voxel.
 
 %%% Include covariance matrix as a weighting matrix
 % Regularization types 3 and 4 ONLY
@@ -170,7 +150,7 @@ options.beta = 1;
 % Imaginary part (only when complex data is used)
 options.betaI = 1;
 
-%%% Use Matern prior
+%%%%%%%%%%%%%% Use Matern prior %%%%%%%%%%%%%%
 % If true, then replaces the process noise covariance with the Matern
 % prior. This setting overwrites all values you give to the process noise
 % covariance.
@@ -191,16 +171,23 @@ options.maternDeltaT = 0.0385;
 options.maternDistance = 5;
 
 
-%%% Fading memory
-% If value other than 1 is given, then the fading memory KF is used
+%%%%%%%%%%%%%% Fading memory / covariance inflation %%%%%%%%%%%%%%
+% If value other than 1 is given, then the fading memory KF is used when
+% using algorithm 0. For ETKF and ESTKF, this is the covariance
+% inflation parameter.
 % Empty value/array functions identical to 1
 options.fadingAlpha = 1;
 
-%%% Steady state KF
+%%%%%%%%%%%%%% Steady state KF %%%%%%%%%%%%%%
 % If true, computes the steady state Kalman gain and error covariance
 % matrices
 % NOTE: Algorithms 0-2 ONLY
 options.steadyKF = false;
+% Steady state threshold
+% The iterations for the steady state gain are aborted after the Euclidean
+% norm of the previous diagonal elements minus the current diagonal
+% elements of the a posteriori covariance is below this value
+options.steadyThreshold = 0.001;
 
 %%% Precompute the error covariance
 % You can specify the number of preiterations for the error covariance
@@ -208,9 +195,15 @@ options.steadyKF = false;
 % error covariances are computed options.covIter times before the actual KF
 % estimates are computed.
 % NOTE: Applies only to algorithms 0-2 and algorithm 9
+% NOTE: Steady state takes priority over this
 options.covIter = 0;
+% Precompute the initial value
+% If true, will also compute the KF estimates as the initial values for the
+% actual filter. This applies to either steady state or precomputed
+% covariance, whichever is selected
+options.computeInitialValue = false;
 
-%%% Use Kalman smoother (KS)
+%%%%%%%%%%%%%% Use Kalman smoother (KS) %%%%%%%%%%%%%%
 % If true, then Kalman smoother is used
 % NOTE: Only algorithms 0-2, 7, 8, 9, 10 and 11 support KS
 options.useKS = false;
@@ -231,7 +224,7 @@ options.steadyKS = false;
 % matrix in the KS gain computations
 options.approximateKS = false;
 
-%%% Consistency tests
+%%%%%%%%%%%%%% Consistency tests %%%%%%%%%%%%%%
 % Compute the consistency tests (NIS and autocorrelation by default)
 % All previous selections will be applied normally.
 % Only algorithms 0-2 and 10 are supported
@@ -256,11 +249,15 @@ options.stepSize = 610;
 % NOTE: Only algorithms 0 - 2 are supported
 options.computeBayesianP = true;
 
-%%% Ensemble size
+%%%%%%%%%%%%%% Ensemble size %%%%%%%%%%%%%%
 % For ensemble filters only (algorithms 4-8)
 options.ensembleSize = 1000;
+% Use ensemble mean
+% If true, uses the mean of the ensemble to compute the new a priori
+% ensemble. Otherwise uses the full ensemble.
+options.useEnsembleMean = false;
 
-%%% Reduced rank KF (algorithm 9)
+%%%%%%%%%%%%%% Reduced rank KF (algorithm 9) %%%%%%%%%%%%%%
 % Use custom prior covariance?
 options.useCustomCov = false;
 % Input the custom prior covariance here if the above is true
@@ -279,19 +276,22 @@ options.reducedCorLength = 3;
 % The number of basis functions to use
 options.reducedBasisN = 500;
 
-%%% CG KF/VKF
+%%%%%%%%%%%%%% CG KF/VKF %%%%%%%%%%%%%%
 % Number of CG iterations
 options.cgIter = 40;
 % Stopping threshold for CG iterations
 options.cgThreshold = 1e-4;
+% Force orthogonalization in CG/Lanczos iterations
+% Increases computation times, but increases accuracy
+options.forceOrthogonalization = true;
 
-%%% Sliding window KF
+%%%%%%%%%%%%%% Sliding window KF %%%%%%%%%%%%%%
 % The number of sliding time steps used. E.g., if options.window = 3, each
 % KF time step contains three time steps. In the subsequent steps, the last
 % time step is removed and a new one is added.
 options.window = 1;
 
-%%% Estimate size
+%%%%%%%%%%%%%% Estimate size %%%%%%%%%%%%%%
 % Number of columns/rows
 options.Nx = 128;
 % Number of rows/columns
@@ -299,7 +299,7 @@ options.Ny = 128;
 % Number of slices
 options.Nz = 1;
 
-%%% 3D or pseudo-3D
+%%%%%%%%%%%%%% 3D or pseudo-3D %%%%%%%%%%%%%%
 % Applies only if options.Nz > 1
 % If true, assumes that the data is full 3D --> system matrix is assumed to
 % contain all the necessary rows for x = H'*y in 3D
@@ -308,10 +308,10 @@ options.Nz = 1;
 % (common in MRI)
 options.use3D = false;
 
-%%% Number of time steps
+%%%%%%%%%%%%%% Number of time steps %%%%%%%%%%%%%%
 options.Nt = 50;
 
-%%% Input measurement data
+%%%%%%%%%%%%%% Input measurement data %%%%%%%%%%%%%%
 % Input the measurement data here
 options.m0 = mgeom.projdata;
 
@@ -321,7 +321,7 @@ options.m0 = mgeom.projdata;
 % step.
 options.Nm = 1;
 
-%%% Input system matrix
+%%%%%%%%%%%%%% Input system matrix %%%%%%%%%%%%%%
 % Input your system/observation matrix here. The matrix can be either
 % sparse or dense, as well as either real-valued or complex-valued. Note
 % that dense (full) matrices need to be in single precision while sparse
@@ -340,7 +340,7 @@ options.matCycles = 1;
 % computations).
 options.storeData = true;
 
-%%% Initial value for the a priori error covariance
+%%%%%%%%%%%%%% Initial value for the a priori error covariance %%%%%%%%%%%%%%
 % Can be either scalar or vector, in both cases the matrix will be diagonal
 % with the vector case corresponding to the variances.
 options.P0 = 1e-2;
@@ -353,14 +353,14 @@ options.P0 = 1e-2;
 % NOTE: Supports only algorithms 0-2 and 9. 9 only supports value 2.
 options.storeCovariance = 0;
 
-%%% Initial value for the estimate
+%%%%%%%%%%%%%% Initial value for the estimate %%%%%%%%%%%%%%
 if options.complexType == 0
     options.x0 = zeros(options.Nx * options.Ny * options.Nz, 1,'single');
 else
     options.x0 = complex(zeros(options.Nx * options.Ny * options.Nz, 1,'single'));
 end
 
-%%% Process noise covariance values
+%%%%%%%%%%%%%% Process noise covariance values %%%%%%%%%%%%%%
 % Can be either scalar, vector, matrix or cell matrix. In the case of
 % scalar or vector inputs, Q is assumed to be diagonal. In the case of
 % matrix input, columns are considered as diagonals for each time step. For
@@ -368,12 +368,12 @@ end
 % matrix Q, use only one cell. Matrix Q can be either sparse or dense (the
 % latter has to be in single precision).
 options.Q = 5e-3;
-% Is the matrix Q already inverted?
-% This can be useful for algorithms that require inverted Q if the Q has
-% already been inverted.
+%%% Process noise covariance as inverse
+% Set this to true if the input values/matrices of Q have already
+% been inverted (applies to algorithms that use inverted covariance)
 options.invertedQ = false;
 
-%%% Observation noise covariance values
+%%%%%%%%%%%%%% Observation noise covariance values %%%%%%%%%%%%%%
 % Can be either scalar, vector, matrix or cell matrix. In the case of
 % scalar or vector inputs, R is assumed to be diagonal. In the case of
 % matrix input, columns are considered as diagonals for each time step. For
@@ -381,12 +381,12 @@ options.invertedQ = false;
 % matrix Q, use only one cell. Matrix R can be either sparse or dense (the
 % latter has to be in single precision).
 options.R = 4e-2;
-% Is the matrix R already inverted?
-% This can be useful for algorithms that require inverted R if the R has
-% already been inverted.
+%%% Observation noise covariance as inverse
+% Set this to true if the input values/matrices of R have already
+% been inverted (applies to algorithms that use inverted covariance)
 options.invertedR = false;
 
-%%% Input state transition matrix
+%%%%%%%%%%%%%% Input state transition matrix %%%%%%%%%%%%%%
 % You can include your own state transition matrix here.
 % NOTE: if you use SPKF or the kinematic model, any F matrix you input here
 % will be OVERWRITTEN.
@@ -403,7 +403,7 @@ options.useKinematicModel = false;
 % "Time" value used by the kinematic model
 options.deltaT = 0.0385;
 
-%%% Input (optional) state vector
+%%%%%%%%%%%%%% Input (optional) state vector %%%%%%%%%%%%%%
 % You can include additional vector to be included to the a priori
 % estimate, defined as the vector u in the equation list. If the vector u
 % is time dependent, input it as a 2D matrix, where each column corresponds
@@ -415,7 +415,7 @@ options.deltaT = 0.0385;
 % matrix for it
 % options.G = [];
 
-%%% Backend type
+%%%%%%%%%%%%%% Backend type %%%%%%%%%%%%%%
 % This specifies how the computations are performed. CUDA capable GPUs
 % should use CUDA, otherwise OpenCL. CPUs can use either OpenCL (if
 % runtimes are available) or CPU
