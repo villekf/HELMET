@@ -4,7 +4,7 @@ High-dimensional Kalman filter toolbox (HELMET) is an open-source software for h
 
 # Introduction
 
-HELMET is a software for [MATLAB](https://www.mathworks.com/) and [GNU Octave](https://www.gnu.org/software/octave/) to estimate especially high-dimensional dynamic problems. However, the software does not have constraints on the input data size or dimensionality, the only requirement is a linear problem. As such problems of any dimension can be used though estimating only a few states gives no benefit when using GPUs. Note also that the an inidivual state/estimate can be 1D, 2D or 3D.
+HELMET is a software for [MATLAB](https://www.mathworks.com/) and [GNU Octave](https://www.gnu.org/software/octave/) to estimate especially high-dimensional dynamic problems. However, the software does not have constraints on the input data size or dimensionality, the only requirement is a linear problem. As such problems of any dimension can be used though estimating only a few states gives no benefit when using GPUs. Note also that an inidivual state/estimate can be 1D, 2D or 3D.
 
 For "high dimension" the number of estimates (states) is considered to be > 10000 though this depends on the computational resources. Note that the main restrictions in using the regular KF and its modifications is the memory required by the estimate error covariance(s) and Kalman gain. For the error covariance, the memory requirements can be computed with `total number of states * total number of states * 4 / 1024^3`, for the gain the formula is `total number of states * total number of measurements * 4 / 1024^3`.
 
