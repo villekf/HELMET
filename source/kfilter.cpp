@@ -1689,6 +1689,8 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				}
 			}
 
+
+
 			// Preiterate covariance or compute the steady state gain
 			if (covIter > 0 || steadyKF) {
 				while (!steady) {
@@ -1892,6 +1894,18 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 				//mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
 				//mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
 				//mexEvalString("pause(.0001);");
+
+				if (complexType == 3)
+					xtr = join(0, real(xt(span, oo, NN)), imag(xt(span, oo, NN)));
+				else
+					xtr = real(xt(span, oo, NN));
+				if (complexType == 1 || complexType == 2)
+					xti = imag(xt(span, oo, NN));
+				if (DEBUG) {
+					mexPrintf("xtr.dims(0) = %d\n", xtr.dims(0));
+					mexPrintf("xtr.dims(1) = %d\n", xtr.dims(1));
+					mexEvalString("pause(.0001);");
+				}
 				if (useSmoother && !steadyKF && (!steadyS || (steadyS && tt == N_lag - 1ULL) || (steadyS && tt >= N_lag - 1 && jg == skip) || (steadyS && tt == (Nt - 1)))) {
 					//if (useKineticModel)
 					//	Pminus = Pplus(seq(0, imDimU - 1), seq(0, imDimU - 1));
@@ -1971,7 +1985,7 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							Pplus(seq(0, end, Pplus.dims(0) + 1)) = Pplus(seq(0, end, Pplus.dims(0) + 1)) + Q[tt % sizeQ](span, NN);
 							//mexPrintf("Q[tt sizeQ](span, NN).summa = %f\n", af::sum<float>(flat(Q[tt % sizeQ](span, NN))));
 							//mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
-							mexEvalString("pause(.0001);");
+							//mexEvalString("pause(.0001);");
 							Pplus = -batchFunc(transpose(Q[tt % sizeQ](span, NN)), batchFunc(Q[tt % sizeQ](span, NN), inverse(Pplus), batchMul), batchMul);
 							//mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
 							//mexEvalString("pause(.0001);");
@@ -2232,13 +2246,6 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						mexEvalString("pause(.0001);");
 					}
 				}
-
-				if (complexType == 3)
-					xtr = join(0, real(xt(span, oo, NN)), imag(xt(span, oo, NN)));
-				else
-					xtr = real(xt(span, oo, NN));
-				if (complexType == 1 || complexType == 2)
-					xti = imag(xt(span, oo, NN));
 				//if (algorithm == 2) {
 				//	computeInnovation(regularization, SS, window, real(m0), nMeas, NN, Nm, tt, S[tt % hnU], xtr, Ly, Si, complexType, hnU);
 				//	computeAPrioriX(useF, useU, useG, useKineticModel, algorithm, xtr, xti, imDim, F, Fi, complexType, G, Gi, u, complexF, complexG, tt, sizeF, sizeG, sizeU);
