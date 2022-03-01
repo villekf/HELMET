@@ -3755,8 +3755,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					xtr = join(0, real(xt(span, tt, NN)), imag(xt(span, tt, NN)));
 				else
 					xtr = xt(span, tt, NN);
-				//mexPrintf("xtr.dims(0) = %d\n", xtr.dims(0));
-				//mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("xtr.dims(0) = %d\n", xtr.dims(0));
+					mexEvalString("pause(.0001);");
+				}
 				computeAPrioriX(useF, useU, useG, useKineticModel, algorithm, xtr, xti, imDim, F, Fi, complexType, G, Gi, u, complexF, complexG, tt, sizeF, sizeG, sizeU);
 				if (useSmoother || regularization == 3) {
 					cholesky(A, Pplus, false);
@@ -3766,19 +3768,21 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					if (complexType == 2)
 						KSi[tt % N_lag] = Ai;
 				}
-				//mexPrintf("A.dims(0) = %d\n", A.dims(0));
-				//mexPrintf("A.dims(1) = %d\n", A.dims(1));
-				//mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
-				//mexEvalString("pause(.0001);");
-				//mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
-				//mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
+				if (DEBUG) {
+					mexPrintf("A.dims(0) = %d\n", A.dims(0));
+					mexPrintf("A.dims(1) = %d\n", A.dims(1));
+					mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
+					mexPrintf("Pred.dims(0) = %d\n", Pred.dims(0));
+					mexPrintf("Pred.dims(1) = %d\n", Pred.dims(1));
+					mexPrintf("Pred.summa = %f\n", af::sum<float>(flat(Pred)));
+					mexEvalString("pause(.0001);");
+				}
 				//mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
 				//mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
 				//if (complexS) {
 				//	mexPrintf("Si[0].dims(0) = %d\n", Si[0].dims(0));
 				//	mexPrintf("Si[0].dims(1) = %d\n", Si[0].dims(1));
 				//}
-				//mexPrintf("Pred.summa = %f\n", af::sum<float>(flat(Pred)));
 				//mexEvalString("pause(.0001);");
 				if (complexType == 3) {
 					PH = matmul3(S, Si, Pred, tt % hnU);
@@ -3788,10 +3792,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					if (complexS)
 						PHi = matmul(Si[tt % hnU], Pred);
 				}
-				//mexPrintf("PH.dims(0) = %d\n", PH.dims(0));
-				//mexPrintf("PH.dims(1) = %d\n", PH.dims(1));
-				//mexPrintf("PH.summa = %f\n", af::sum<float>(flat(PH)));
-				//mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("PH.dims(0) = %d\n", PH.dims(0));
+					mexPrintf("PH.dims(1) = %d\n", PH.dims(1));
+					mexPrintf("PH.summa = %f\n", af::sum<float>(flat(PH)));
+					mexEvalString("pause(.0001);");
+				}
 				if (useF) {
 					if (!useSmoother && regularization != 3)
 						//if (useKineticModel) {
@@ -3842,10 +3848,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							Bi = matmul(Pred, Ai);
 					}
 				}
-				//mexPrintf("B.dims(0) = %d\n", B.dims(0));
-				//mexPrintf("B.dims(1) = %d\n", B.dims(1));
-				//mexPrintf("B.summa = %f\n", af::sum<float>(flat(B)));
-				//mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("B.dims(0) = %d\n", B.dims(0));
+					mexPrintf("B.dims(1) = %d\n", B.dims(1));
+					mexPrintf("B.summa = %f\n", af::sum<float>(flat(B)));
+					mexEvalString("pause(.0001);");
+				}
 				if (sparseQ) {
 					Cred = matmulTN(Pred, matmul(Q[tt % sizeQ], Pred)) - matmul(matmulTN(Pred, matmul(Q[tt % sizeQ], B)), solve(matmulTN(B, matmul(Q[tt % sizeQ], B)) + identity(B.dims(1), B.dims(1)), matmulTN(B, matmul(Q[tt % sizeQ], Pred))));
 					if (complexType == 2)
@@ -3863,10 +3871,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							solve(matmulTN(Bi, tile(Qi[tt % sizeQ](span, NN), 1, Bi.dims(1)) * Bi) + identity(Bi.dims(1), Bi.dims(1)), matmulTN(Bi, tile(Qi[tt % sizeQ](span, NN), 1, Pred.dims(1)) * Pred)));
 					}
 				}
-				//mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
-				//mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
-				//mexPrintf("Cred.summa = %f\n", af::sum<float>(flat(Cred)));
-				//mexEvalString("pause(.0001);");
+				if (DEBUG) {
+					mexPrintf("Cred.dims(0) = %d\n", Cred.dims(0));
+					mexPrintf("Cred.dims(1) = %d\n", Cred.dims(1));
+					mexPrintf("Cred.summa = %f\n", af::sum<float>(flat(Cred)));
+					mexEvalString("pause(.0001);");
+				}
 				if (complexType == 3)
 					computeInnovation(regularization, SS, window, m0, nMeas, NN, Nm, tt, S[tt % hnU], xtr, Ly, Si, complexType, hnU);
 				else
@@ -3907,7 +3917,7 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 								else
 									alphaEst = solve(Ai.T(), solve(Ai, matmulTN(PH, matmul(Ri[tt % sizeR], SS)), AF_MAT_LOWER), AF_MAT_UPPER);
 							else
-								alphaEst = solve(Ai.T(), solve(Ai, matmulTN(PH, matmul(R[tt % sizeR], SS)), AF_MAT_LOWER), AF_MAT_UPPER);
+								alphaEst = solve(A.T(), solve(A, matmulTN(PH, matmul(R[tt % sizeR], SS)), AF_MAT_LOWER), AF_MAT_UPPER);
 						}
 						else {
 							if (complexType == 2) {
@@ -3959,11 +3969,21 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					//mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
 					//mexPrintf("SS.summa = %f\n", af::sum<float>(flat(SS)));
 					//mexEvalString("pause(.0001);");
-					//mexPrintf("alphaEst.dims(0) = %d\n", alphaEst.dims(0));
-					//mexPrintf("alphaEst.dims(1) = %d\n", alphaEst.dims(1));
-					//mexPrintf("alphaEst.summa = %f\n", af::sum<float>(flat(alphaEst)));
-					//mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("alphaEst0.dims(0) = %d\n", alphaEst.dims(0));
+						mexPrintf("alphaEst0.dims(1) = %d\n", alphaEst.dims(1));
+						mexPrintf("alphaEst0.summa = %f\n", af::sum<float>(flat(alphaEst)));
+						mexPrintf("A.summa = %f\n", af::sum<float>(flat(A)));
+						mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
+						mexEvalString("pause(.0001);");
+					}
 					xtr += matmul(Pred, alphaEst);
+					if (DEBUG) {
+						mexPrintf("xtr.dims(0) = %d\n", xtr.dims(0));
+						mexPrintf("xtr.dims(1) = %d\n", xtr.dims(1));
+						mexPrintf("xtr.summa = %f\n", af::sum<float>(flat(xtr)));
+						mexEvalString("pause(.0001);");
+					}
 					if (complexType == 1 || complexType == 2) {
 						if (complexS)
 							if (complexRef && augType > 0 && regularization == 1)
@@ -4002,7 +4022,7 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						else {
 							//computeInnovation(regularization, SS, window, imag(m0), nMeas, NN, Nm, tt, S[tt % hnU], xti, Ly, Si, complexType, hnU);
 							if (!useSmoother && regularization != 3)
-								alphaEst = solve(Ai.T(), solve(Ai, matmulTN(PHi, augmentedR(R[tt % sizeR], regularization, RR, xti.dims(0), complexType) * SS), AF_MAT_LOWER), AF_MAT_UPPER);
+								alphaEst = solve(A.T(), solve(A, matmulTN(PH, augmentedR(R[tt % sizeR], regularization, RR, xti.dims(0), complexType) * SS), AF_MAT_LOWER), AF_MAT_UPPER);
 							else
 								alphaEst = matmul(Pplus, PH.T(), augmentedR(R[tt % sizeR], regularization, RR, xti.dims(0), complexType) * SS);
 						}
