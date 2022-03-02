@@ -26,7 +26,8 @@ options.H = [];
 
 %%% Number of unique system matrix cycles
 % The system/observation matrix contains (Nm * matCycles) * (Nx * Ny * Nz)
-% elements. This also must be input.
+% elements. This also must be input. See the documentation (Adjustable
+% parameters --> General settings) for an example.
 options.matCycles = 1;
 
 %%%%%%%%%%%%%% KF Type %%%%%%%%%%%%%%
