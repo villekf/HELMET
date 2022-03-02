@@ -312,7 +312,7 @@ options.Nt = 50;
 
 %%%%%%%%%%%%%% Input measurement data %%%%%%%%%%%%%%
 % Input the measurement data here
-options.m0 = mgeom.projdata;
+options.m0 = [];
 
 %%% Number of measurements per time step
 % The number of measurements at each time step. Has to be > 0 and must be
