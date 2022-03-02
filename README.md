@@ -1,5 +1,7 @@
 # HELMET
 
+[![DOI](https://zenodo.org/badge/454426808.svg)](https://zenodo.org/badge/latestdoi/454426808)
+
 High-dimensional Kalman filter toolbox (HELMET) is an open-source software for high-dimensional linear dynamic problems. HELMET includes various KF algorithms that can be used to estimate any linear dynamic problems. The core idea of HELMET is the use of GPUs for the fast computation of Kalman filter.
 
 # Introduction
