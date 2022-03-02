@@ -4,6 +4,31 @@
 % should be MATLAB/Octave sparse matrices. For more details on the various
 % options see the documentation.
 
+%%%%%%%%%%%%%% Number of time steps %%%%%%%%%%%%%%
+options.Nt = 50;
+
+%%%%%%%%%%%%%% Input measurement data %%%%%%%%%%%%%%
+% Input the measurement data here
+options.m0 = [];
+
+%%% Number of measurements per time step
+% The number of measurements at each time step. Has to be > 0 and must be
+% input. This refers to the number of elements in options.m0 for each time
+% step.
+options.Nm = 1;
+
+%%%%%%%%%%%%%% Input system matrix %%%%%%%%%%%%%%
+% Input your system/observation matrix here. The matrix can be either
+% sparse or dense, as well as either real-valued or complex-valued. Note
+% that dense (full) matrices need to be in single precision while sparse
+% matrices need to be in MATLAB/Octave sparse format. This must be input.
+options.H = [];
+
+%%% Number of unique system matrix cycles
+% The system/observation matrix contains (Nm * matCycles) * (Nx * Ny * Nz)
+% elements. This also must be input.
+options.matCycles = 1;
+
 %%%%%%%%%%%%%% KF Type %%%%%%%%%%%%%%
 % This specifies the type of KF algorithm used. Many of these algorithms
 % have their own specific properties that can be adjusted below.
@@ -306,31 +331,6 @@ options.Nz = 1;
 % independent 2D reconstruction with the same system matrix for each slice
 % (common in MRI)
 options.use3D = false;
-
-%%%%%%%%%%%%%% Number of time steps %%%%%%%%%%%%%%
-options.Nt = 50;
-
-%%%%%%%%%%%%%% Input measurement data %%%%%%%%%%%%%%
-% Input the measurement data here
-options.m0 = [];
-
-%%% Number of measurements per time step
-% The number of measurements at each time step. Has to be > 0 and must be
-% input. This refers to the number of elements in options.m0 for each time
-% step.
-options.Nm = 1;
-
-%%%%%%%%%%%%%% Input system matrix %%%%%%%%%%%%%%
-% Input your system/observation matrix here. The matrix can be either
-% sparse or dense, as well as either real-valued or complex-valued. Note
-% that dense (full) matrices need to be in single precision while sparse
-% matrices need to be in MATLAB/Octave sparse format. This must be input.
-options.H = [];
-
-%%% Number of unique system matrix cycles
-% The system/observation matrix contains (Nm * matCycles) * (Nx * Ny * Nz)
-% elements. This also must be input.
-options.matCycles = 1;
 
 %%% Store all system matrix elements in the device
 % If true, all system matrix elements are stored in the selected device.
