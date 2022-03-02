@@ -1112,10 +1112,12 @@ void computeKG(const uint32_t algorithm, array& KG, array& HH, const bool sparse
 			else
 				KG = (matmul(S[ind], (Pplus)));
 		}
-		mexPrintf("KG.dims(0) = %d\n", KG.dims(0));
-		mexPrintf("KG.dims(1) = %d\n", KG.dims(1));
-		mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("KG.dims(0) = %d\n", KG.dims(0));
+			mexPrintf("KG.dims(1) = %d\n", KG.dims(1));
+			mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
+			mexEvalString("pause(.0001);");
+		}
 		if (complexType == 3) {
 			HH = transpose(join(0, matmul(S[ind], KG(seq(0, KG.dims(0) / 2 - 1), span)) - matmul(Si[ind], KG(seq(KG.dims(0) / 2, end), span)),
 				matmul(Si[ind], KG(seq(0, KG.dims(0) / 2 - 1), span)) + matmul(S[ind], KG(seq(KG.dims(0) / 2, end), span))));
@@ -1128,10 +1130,12 @@ void computeKG(const uint32_t algorithm, array& KG, array& HH, const bool sparse
 		}
 		else
 			HH = transpose(matmul(S[ind], transpose(KG)));
-		mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
-		mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
-		mexPrintf("HH.summa = %f\n", af::sum<float>(flat(HH)));
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("HH.dims(0) = %d\n", HH.dims(0));
+			mexPrintf("HH.dims(1) = %d\n", HH.dims(1));
+			mexPrintf("HH.summa = %f\n", af::sum<float>(flat(HH)));
+			mexEvalString("pause(.0001);");
+		}
 		if (sparseR)
 			HH = HH + R[tt % sizeR];
 		else {
@@ -1145,63 +1149,77 @@ void computeKG(const uint32_t algorithm, array& KG, array& HH, const bool sparse
 			else
 				HH(seq(0, end, HH.dims(0) + 1)) = HH(seq(0, end, HH.dims(0) + 1)) + R[tt % sizeR];
 		}
-		//eval(KG);
-		//eval(HH);
-		//mexPrintf("KG.dims(0) = %d\n", KG.dims(0));
-		//mexPrintf("KG.dims(1) = %d\n", KG.dims(1));
-		mexPrintf("HH1.dims(0) = %d\n", HH.dims(0));
-		mexPrintf("HH1.dims(1) = %d\n", HH.dims(1));
-		//mexPrintf("HH.summa = %f\n", af::sum<float>(flat(HH)));
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			//eval(KG);
+			//eval(HH);
+			//mexPrintf("KG.dims(0) = %d\n", KG.dims(0));
+			//mexPrintf("KG.dims(1) = %d\n", KG.dims(1));
+			mexPrintf("HH1.dims(0) = %d\n", HH.dims(0));
+			mexPrintf("HH1.dims(1) = %d\n", HH.dims(1));
+			//mexPrintf("HH.summa = %f\n", af::sum<float>(flat(HH)));
+			mexEvalString("pause(.0001);");
+		}
 		KG = transpose(solve(HH, (KG)));
-		mexPrintf("KG1.dims(0) = %d\n", KG.dims(0));
-		mexPrintf("KG1.dims(1) = %d\n", KG.dims(1));
-		mexEvalString("pause(.0001);");
+		if (DEBUG) {
+			mexPrintf("KG1.dims(0) = %d\n", KG.dims(0));
+			mexPrintf("KG1.dims(1) = %d\n", KG.dims(1));
+			mexEvalString("pause(.0001);");
+		}
 	}
 	else if (algorithm == 1) {
+		if (DEBUG) {
+			mexPrintf("SS.dims(0) = %d\n", SS.dims(0));
+			mexPrintf("SS.dims(1) = %d\n", SS.dims(1));
+			mexPrintf("S[0].dims(0) = %d\n", S[0].dims(0));
+			mexPrintf("S[0].dims(1) = %d\n", S[0].dims(1));
+			mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
+			mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
+			mexPrintf("dims(0) = %d\n", (R[tt % sizeR] * SS).dims(0));
+			mexEvalString("pause(.0001);");
+		}
 		if (SS.dims(0) > 1) {
 			if (sparseR)
 				if (complexType == 3) {
 					KG = matmul(R[tt % sizeR], SS);
-					KG = matmul(Pplus, vecmul3(S, Si, SS, ind, true));
+					KG = matmul(P, vecmul3(S, Si, SS, ind, true));
 				}
 				else
-					KG = matmul(Pplus, matmul(S[tt % hnU], matmul(R[tt % sizeR], SS), AF_MAT_TRANS));
+					KG = matmul(P, matmul(S[tt % hnU], matmul(R[tt % sizeR], SS), AF_MAT_TRANS));
 			else {
 				if (complexType == 3) {
 					if (regularization == 1)
 						KG = join(0, R[tt % sizeR], constant(1.f, Pplus.dims(0), 1) * RR) * SS;
 					else
 						KG = R[tt % sizeR] * SS;
-					KG = matmul(Pplus, vecmul3(S, Si, SS, ind, true));
+					KG = matmul(P, vecmul3(S, Si, SS, ind, true));
 				}
 				else
 					if (regularization == 1)
-						KG = matmul(Pplus, matmul(S[tt % hnU], join(0, R[tt % sizeR], constant(1.f, Pplus.dims(0), 1) * RR) * SS, AF_MAT_TRANS));
+						KG = matmul(P, matmul(S[tt % hnU], join(0, R[tt % sizeR], constant(1.f, Pplus.dims(0), 1) * RR) * SS, AF_MAT_TRANS));
 					else
-						KG = matmul(Pplus, matmul(S[tt % hnU], R[tt % sizeR] * SS, AF_MAT_TRANS));
+						KG = matmul(P, matmul(S[tt % hnU], R[tt % sizeR] * SS, AF_MAT_TRANS));
 				//KG = batchFunc(transpose(R[tt % sizeR]), transpose(matmul(S[tt % hnU], transpose(Pplus))), batchMul);
 			}
 		}
 		else {
 			if (sparseR)
 				if (complexType == 3) {
-					KG = transpose(matmul(R[tt % sizeR], matmul3(S, Si, Pplus, ind)));
+					KG = transpose(matmul(R[tt % sizeR], matmul3(S, Si, P, ind)));
 				}
 				else
-					KG = transpose(matmul(R[tt % sizeR], matmul(S[ind], Pplus)));
+					KG = transpose(matmul(R[tt % sizeR], matmul(S[ind], P)));
 			else {
 				if (complexType == 3) {
 					if (regularization == 1)
-						KG = transpose(tile(join(0, R[tt % sizeR], constant(1.f, Pplus.dims(0), 1) * RR), 1, S[ind].dims(0)) * matmul3(S, Si, Pplus, ind));
+						KG = transpose(tile(join(0, R[tt % sizeR], constant(1.f, P.dims(0), 1) * RR), 1, S[ind].dims(0)) * matmul3(S, Si, P, ind));
 					else
-						KG = transpose(tile(R[tt % sizeR], 1, S[ind].dims(0)) * matmul3(S, Si, Pplus, ind));
+						KG = transpose(tile(R[tt % sizeR], 1, S[ind].dims(0)) * matmul3(S, Si, P, ind));
 				}
 				else
 					if (regularization == 1)
-						KG = transpose(tile(join(0, R[tt % sizeR], constant(1.f, Pplus.dims(0), 1) * RR), 1, S[ind].dims(0)) * matmul(S[ind], Pplus));
+						KG = transpose(tile(join(0, R[tt % sizeR], constant(1.f, P.dims(0), 1) * RR), 1, S[ind].dims(0)) * matmul(S[ind], P));
 					else
-						KG = transpose(tile(R[tt % sizeR], 1, S[ind].dims(0)) * matmul(S[ind], Pplus));
+						KG = transpose(tile(R[tt % sizeR], 1, S[ind].dims(0)) * matmul(S[ind], P));
 				//KG = batchFunc(transpose(R[tt % sizeR]), transpose(matmul(S[tt % hnU], transpose(Pplus))), batchMul);
 			}
 		}
@@ -1973,6 +1991,8 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 						if (DEBUG) {
 							mexPrintf("Q[0].dims(0) = %d\n", Q[0].dims(0));
 							mexPrintf("Q[0].dims(1) = %d\n", Q[0].dims(1));
+							mexPrintf("R[0].dims(0) = %d\n", R[0].dims(0));
+							mexPrintf("R[0].dims(1) = %d\n", R[0].dims(1));
 							mexPrintf("Pplus.summa = %f\n", af::sum<float>(flat(Pplus)));
 							mexEvalString("pause(.0001);");
 						}
@@ -2222,14 +2242,14 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							if (algorithm == 1) {
 								if (complexS)
 									if (complexRef && augType > 0 && regularization == 1)
-										computeInnovation(regularization, SS, window, imag(m0), nMeas, NN, Nm, tt, Si[tt % hnU], xti, Li, Si, complexType, hnU);
+										computeInnovation(regularization, SSi, window, imag(m0), nMeas, NN, Nm, tt, Si[tt % hnU], xti, Li, Si, complexType, hnU);
 									else
-										computeInnovation(regularization, SS, window, imag(m0), nMeas, NN, Nm, tt, Si[tt % hnU], xti, Ly, Si, complexType, hnU);
+										computeInnovation(regularization, SSi, window, imag(m0), nMeas, NN, Nm, tt, Si[tt % hnU], xti, Ly, Si, complexType, hnU);
 								else
 									if (complexRef && augType > 0 && regularization == 1)
-										computeInnovation(regularization, SS, window, imag(m0), nMeas, NN, Nm, tt, S[tt % hnU], xti, Li, Si, complexType, hnU);
+										computeInnovation(regularization, SSi, window, imag(m0), nMeas, NN, Nm, tt, S[tt % hnU], xti, Li, Si, complexType, hnU);
 									else
-										computeInnovation(regularization, SS, window, imag(m0), nMeas, NN, Nm, tt, S[tt % hnU], xti, Ly, Si, complexType, hnU);
+										computeInnovation(regularization, SSi, window, imag(m0), nMeas, NN, Nm, tt, S[tt % hnU], xti, Ly, Si, complexType, hnU);
 							}
 							if (complexS)
 								computeKG(algorithm, KGi, HH, sparseR, Ri, Pplusi, Si, tt, hnU, sizeR, tt % hnU, RR, regularization, complexType, Si, PIi, SSi);
@@ -2238,10 +2258,12 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							if (computeConsistency)
 								HHi = HH;
 						}
-						computeKG(algorithm, KG, HH, sparseR, R, Pplus, S, tt, hnU, sizeR, tt % hnU, RR, regularization, complexType, Si, PI);
+						computeKG(algorithm, KG, HH, sparseR, R, Pplus, S, tt, hnU, sizeR, tt % hnU, RR, regularization, complexType, Si, PI, SS);
 					}
 					af::eval(KG);
 					if (DEBUG) {
+						mexPrintf("KG.dims(0) = %d\n", KG.dims(0));
+						mexPrintf("KG.dims(1) = %d\n", KG.dims(1));
 						mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
 						mexEvalString("pause(.0001);");
 					}
@@ -2272,7 +2294,10 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 					mexPrintf("KG.summa = %f\n", af::sum<float>(flat(KG)));
 					mexEvalString("pause(.0001);");
 				}
-				xtr += matmul(KG, SS);
+				if (algorithm != 1)
+					xtr += matmul(KG, SS);
+				else
+					xtr += KG;
 				if (algorithm == 0 && !steadyKF) {
 					if (complexType == 3)
 						Pplus -= matmul(KG, join(0, matmul(S[tt % hnU], Pplus(seq(0, Pplus.dims(0) / 2 - 1), span)) - matmul(Si[tt % hnU], Pplus(seq(Pplus.dims(0) / 2, end), span)),
@@ -2309,6 +2334,13 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							computeInnovation(regularization, SS, window, imag(m0), nMeas, NN, Nm, tt, S[tt % hnU], xti, Li, Si, complexType, hnU);
 						else
 							computeInnovation(regularization, SS, window, imag(m0), nMeas, NN, Nm, tt, S[tt % hnU], xti, Ly, Si, complexType, hnU);
+					if (algorithm == 1 && complexType == 1)
+						computeKG(algorithm, KG, HH, sparseR, R, Pplus, S, tt, hnU, sizeR, tt % hnU, RR, regularization, complexType, Si, PI, SS);
+					if (DEBUG) {
+						mexPrintf("SS.dims(0) = %d\n", SS.dims(0));
+						mexPrintf("SS.dims(1) = %d\n", SS.dims(1));
+						mexEvalString("pause(.0001);");
+					}
 					if (computeConsistency && tt >= initialSteps) {
 						if (complexType == 2)
 							storeConsistency(tt, Nt, stepSize, epsi, SS, HHi, cc, vvi, sparseR, regularization, Pplusi, epsPi, computeBayesianP, Ri[tt % sizeR], RR, S[tt % hnU], complexType, Si, hnU, false);
@@ -2316,9 +2348,15 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							storeConsistency(tt, Nt, stepSize, epsi, SS, HH, cc, vvi, sparseR, regularization, Pplus, epsPi, computeBayesianP, R[tt % sizeR], RR, S[tt % hnU], complexType, Si, hnU, false);
 					}
 					if (complexType == 2)
-						xti += matmul(KGi, SS);
+						if (algorithm != 1)
+							xti += matmul(KGi, SS);
+						else
+							xti += KGi;
 					else
-						xti += matmul(KG, SS);
+						if (algorithm != 1)
+							xti += matmul(KG, SS);
+						else
+							xti += KG;
 					xt(span, oo + 1, NN) = complex(xtr, xti);
 					if (algorithm == 0 && !steadyKF && complexType == 2) {
 						if (complexS)
