@@ -2279,9 +2279,11 @@ void DKF(array& xt, std::vector<array>& S, std::vector<array>& Si, const array& 
 							matmul(Si[tt % hnU], Pplus(seq(0, Pplus.dims(0) / 2 - 1), span)) + matmul(S[tt % hnU], Pplus(seq(Pplus.dims(0) / 2, end), span))));
 					else
 						Pplus -= matmul(KG, matmul(S[tt % hnU], Pplus));
-					mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
-					mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
-					mexEvalString("pause(.0001);");
+					if (DEBUG) {
+						mexPrintf("Pplus.dims(0) = %d\n", Pplus.dims(0));
+						mexPrintf("Pplus.dims(1) = %d\n", Pplus.dims(1));
+						mexEvalString("pause(.0001);");
+					}
 				}
 				if (computeConsistency && tt >= initialSteps && computeBayesianP) {
 					computeInnovationCov(HH, sparseR, R, Pplus, S, tt, hnU, sizeR, tt % hnU, RR, regularization, complexType, Si);
