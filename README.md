@@ -35,7 +35,7 @@ Note that on Linux platforms you might encounter instability and crashes unless 
 
 On Windows you might need to install [Visual Studio 2015 (x64) runtime libraries](https://www.microsoft.com/en-in/download/details.aspx?id=48145) first before installing ArrayFire.
 
-After installing/building ArrayFire, a C++ compiler is needed in order to compile the MEX-files and use this software. Visual Studio and gcc have been tested to work and are recommended depending on your platform (Visual Studio on Windows, gcc on Linux, clang should work on MacOS). Specifically, Visual Studio 2019 have been tested to work on Windows 10 and as well as g++ 7.3 and 9.3 on Ubuntu 20.04. The use of MinGW++ on Windows requires manual compilation of ArrayFire on Windows with MinGW. For instructions on how to do this, see [here](https://github.com/villekf/OMEGA/wiki/Building-ArrayFire-with-Mingw-on-Windows)). Note that Octave support has not yet been implemented.
+After installing/building ArrayFire, a C++ compiler is needed in order to compile the MEX-files and use this software. Visual Studio and gcc have been tested to work and are recommended depending on your platform (Visual Studio on Windows, gcc on Linux, clang/Xcode should work on MacOS). Specifically, Visual Studio 2019 have been tested to work on Windows 10 and as well as g++ 7.3 and 9.3 on Ubuntu 20.04. The use of MinGW++ on Windows requires manual compilation of ArrayFire on Windows with MinGW. For instructions on how to do this, see [here](https://github.com/villekf/OMEGA/wiki/Building-ArrayFire-with-Mingw-on-Windows)). Note that Octave support on Windows requires the use of MinGW++.
 
 Visual studio can be downloaded from [here](https://visualstudio.microsoft.com/).
 
