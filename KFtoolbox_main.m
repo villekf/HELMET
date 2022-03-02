@@ -97,7 +97,6 @@ options.nIterDenoise = 50;
 % This value allows the TV to be differentiable (a small positive constant
 % in the square root)
 options.TVsmoothing = 1e-6;
-options.weights = [sqrt(2);1;sqrt(2);1;4+sqrt(2)*4;1;sqrt(2);1;sqrt(2)];
 % SATV Phi value
 options.SATVPhi = 1;
 % Eta value for APLS
