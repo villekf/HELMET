@@ -16,9 +16,9 @@ See the [documentation](https://github.com/villekf/HELMET/blob/main/documentatio
 
 ArrayFire is required (https://arrayfire.com/download/).
 
-MATLAB R2009a or later is mandatory.
+MATLAB R2009a or later, or Octave 5.2.0 or newer.
 
-For Windows Visual Studio 2022, 2019, 2017 is recommended with "Desktop development with C++", no other options are required. https://visualstudio.microsoft.com/
+For MATLAB functionality on Windows Visual Studio 2022, 2019, or 2017 is required with "Desktop development with C++", no other options are required. Note that you should always install the Visual Studio supported by your MATLAB ([latest MATLAB version](https://www.mathworks.com/support/requirements/supported-compilers.html), [previous versions](https://www.mathworks.com/support/requirements/previous-releases.html)). https://visualstudio.microsoft.com/
 
 For Linux it is recommended to use GCC which usually comes bundled with the system. 
 
@@ -31,9 +31,11 @@ https://arrayfire.com/download/
 and the source code from here:  
 https://github.com/arrayfire/arrayfire
 
+Note that on Linux platforms you might encounter instability and crashes unless the graphics functions of ArrayFire are disabled. You can fix this easily by either renaming or deleting all libforge.so files in the ArrayFire lib-folder (e.g. `\opt\arrayfire\lib` or `\opt\arrayfire\lib64` if the default location is used).
+
 On Windows you might need to install [Visual Studio 2015 (x64) runtime libraries](https://www.microsoft.com/en-in/download/details.aspx?id=48145) first before installing ArrayFire.
 
-After installing/building ArrayFire, a C++ compiler is needed in order to compile the MEX-files and use this software. Visual Studio and GCC have been tested to work and are recommended depending on your platform (Visual Studio on Windows, GCC on Linux, clang should work on MacOS). Specifically, Visual Studio 2019 have been tested to work on Windows 10 and as well as G++ 7.3 and 9.3 on Ubuntu 20.04. The use of MinGW++ on Windows requires manual compilation of ArrayFire on Windows with MinGW. For instructions on how to do this, see [here](https://github.com/villekf/OMEGA/wiki/Building-ArrayFire-with-Mingw-on-Windows)). Note that Octave support has not yet been implemented.
+After installing/building ArrayFire, a C++ compiler is needed in order to compile the MEX-files and use this software. Visual Studio and gcc have been tested to work and are recommended depending on your platform (Visual Studio on Windows, gcc on Linux, clang should work on MacOS). Specifically, Visual Studio 2019 have been tested to work on Windows 10 and as well as g++ 7.3 and 9.3 on Ubuntu 20.04. The use of MinGW++ on Windows requires manual compilation of ArrayFire on Windows with MinGW. For instructions on how to do this, see [here](https://github.com/villekf/OMEGA/wiki/Building-ArrayFire-with-Mingw-on-Windows)). Note that Octave support has not yet been implemented.
 
 Visual studio can be downloaded from [here](https://visualstudio.microsoft.com/).
 
@@ -56,6 +58,10 @@ Installing/building ArrayFire to the default location (`C:\Program Files\ArrayFi
 # Known Issues and Limitations
 
 Due to ArrayFire bugs, OpenCL might not work with algorithms requiring inversion of matrices or SVD.
+
+In order to get this toolbox to work on Windows with Octave, you need to build ArrayFire manually using MinGW++. For details see [here](https://github.com/villekf/OMEGA/wiki/Building-ArrayFire-with-Mingw-on-Windows).
+
+Mac build and functionality is untested.
 
 # Reporting Bugs and Feature Requests
 
