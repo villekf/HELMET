@@ -6324,7 +6324,7 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 				if (complexType == 3) {
 					Rvalues[tt] = join(0, array(nNZ, 1, R1.data()), array(nNZ, 1, R12.data()));
 					Rrow[tt] = array(rCols.size(), rCols.data());
-					Rrow[tt] = join(0, Rrow[tt], Rrow[tt](seq(1, end)) + tile(Rrow[tt](end), Rrow[tt].dims(0) - 1), 1);
+					Rrow[tt] = join(0, Rrow[tt], Rrow[tt](seq(1, end)) + tile(Rrow[tt](end), Rrow[tt].dims(0) - 1, 1));
 					Rcol[tt] = array(rRows.size(), rRows.data());
 					Rcol[tt] = join(0, Rcol[tt], Rcol[tt] + static_cast<int32_t>(nRow));
 				}
@@ -6377,7 +6377,7 @@ void kfilter(const mxArray* options, float* out, float* out2, float* outS, float
 					if (complexType == 3) {
 						Rvalues2[tt] = join(0, array(nNZ, 1, R1.data()), array(nNZ, 1, R12.data()));
 						Rrow2[tt] = array(rCols.size(), rCols.data());
-						Rrow2[tt] = join(0, Rrow2[tt], Rrow2[tt](seq(1, end)) + tile(Rrow2[tt](end), Rrow2[tt].dims(0) - 1), 1);
+						Rrow2[tt] = join(0, Rrow2[tt], Rrow2[tt](seq(1, end)) + tile(Rrow2[tt](end), Rrow2[tt].dims(0) - 1));
 						Rcol2[tt] = array(rRows.size(), rRows.data());
 						Rcol2[tt] = join(0, Rcol2[tt], Rcol2[tt] + static_cast<int32_t>(nRow));
 					}
