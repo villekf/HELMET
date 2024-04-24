@@ -18,7 +18,7 @@ See the [documentation](https://github.com/villekf/HELMET/blob/main/documentatio
 
 ArrayFire is required (https://arrayfire.com/download/).
 
-MATLAB R2009a or later, or Octave 5.2.0 or newer.
+MATLAB R2009a or newer, or Octave 5.2.0 or newer.
 
 For MATLAB functionality on Windows Visual Studio 2022, 2019, or 2017 is required with "Desktop development with C++", no other options are required. Note that you should always install the Visual Studio supported by your MATLAB ([latest MATLAB version](https://www.mathworks.com/support/requirements/supported-compilers.html), [previous versions](https://www.mathworks.com/support/requirements/previous-releases.html)). https://visualstudio.microsoft.com/
 
